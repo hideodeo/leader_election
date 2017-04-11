@@ -11,7 +11,7 @@ import entities.MyGraph;
  */
 public class BFSTreeGenerator implements TreeGenerator {
     @Override
-    public void create(MyGraph graph) {
+    public void create(MyGraph graphIn) {
 
     }
 }

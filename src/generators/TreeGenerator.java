@@ -12,7 +12,7 @@ import entities.MyGraph;
 public interface TreeGenerator {
     /**
      * ツリーを作成して返すメソッド
-     * @param graph
+     * @param graphIn
      */
-    void create(MyGraph graph);
+    void create(MyGraph graphIn);
 }
