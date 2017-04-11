@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class NWSGraphGenerator implements GraphGenerator {
     /** 辺を張る確率p */
-    private final double p = 0.5;
+    private double p = 0.5;
 
     /**
      * NWSグラフを作成して返す
@@ -51,5 +51,16 @@ public class NWSGraphGenerator implements GraphGenerator {
         }
 
         return graph;
+    }
+
+    /** グラフ作成に必要なパラメータのgetterとsetter */
+
+    public double getPossibilityToCreateEdge() {
+        return this.p;
+    }
+
+    public void setPossibilityToCreateEdge(double p) {
+        assert p > 1 : "Possibility p must be in the range [0, 1]";
+        this.p = p;
     }
 }
