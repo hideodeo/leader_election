@@ -14,15 +14,24 @@ import java.util.List;
  *
  */
 public class LatticeGraphGenerator implements GraphGenerator{
+    /** 頂点数 */
+    private int vertexCount;
+
+    /**
+     * コンストラクタ
+     * @param vertexCount 頂点数
+     */
+    public LatticeGraphGenerator(int vertexCount) {
+        this.vertexCount = vertexCount;
+    }
 
     /**
      * Latticeグラフを作成して返す
      * 前提：受け取る頂点数は必ずx^2の形
-     * @param vertexCount  頂点数
      * @return Latticeグラフ
      */
     @Override
-    public MyGraph<MyVertex, MyEdge> create(int vertexCount) {
+    public MyGraph<MyVertex, MyEdge> create() {
         MyGraph<MyVertex, MyEdge> graph = new MyGraph<MyVertex, MyEdge>();
 
         // 頂点の作成・追加

@@ -12,8 +12,7 @@ import entities.MyVertex;
 public interface GraphGenerator {
     /**
      * グラフを作成して返すメソッド
-     * @param vertexCount  頂点数
      * @return  作成されたグラフ
      */
-    MyGraph<MyVertex, MyEdge> create(int vertexCount);
+    MyGraph<MyVertex, MyEdge> create();
 }

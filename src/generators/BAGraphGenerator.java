@@ -14,46 +14,49 @@ import java.util.HashSet;
  * http://jung.sourceforge.net/doc/api/edu/uci/ics/jung/algorithms/generators/random/BarabasiAlbertGenerator.html
  */
 public class BAGraphGenerator implements GraphGenerator {
+    /** 頂点数 */
+    private int vertexCount;
     /** evolve()1回あたりに辺を作る個数? */
     private int numEdgesToAttach = 5;
     /** evolve()する回数 */
     private int numTimeSteps = 10;
 
     /**
+     * コンストラクタ
+     * @param vertexCount 頂点数
+     */
+    public BAGraphGenerator(int vertexCount) {
+        this.vertexCount = vertexCount;
+    }
+
+    /**
+     * コンストラクタ
+     * @param vertexCount 頂点数
+     * @param numEdgesToAttach evolve1回あたりに辺を作る個数?
+     * @param numTimeSteps evolve数
+     */
+    public BAGraphGenerator(int vertexCount, int numEdgesToAttach, int numTimeSteps) {
+        this.vertexCount = vertexCount;
+        this.numEdgesToAttach = numEdgesToAttach;
+        this.numTimeSteps = numTimeSteps;
+    }
+
+    /**
      * BAグラフを作成する
-     * @param vertexCount  頂点数
      * @return BAグラフ
      */
     @Override
-    public MyGraph<MyVertex, MyEdge> create(int vertexCount) {
+    public MyGraph<MyVertex, MyEdge> create() {
         BarabasiAlbertGenerator bag = new BarabasiAlbertGenerator<MyVertex, MyEdge>(
                 MyGraph.getFactory(),
                 MyVertex.getFactory(),
                 MyEdge.getFactory(),
-                vertexCount,
-                numEdgesToAttach,
+                this.vertexCount,
+                this.numEdgesToAttach,
                 new HashSet<MyVertex>()
         );
-        bag.evolveGraph(numTimeSteps);
+        bag.evolveGraph(this.numTimeSteps);
         MyGraph<MyVertex, MyEdge> graph = (MyGraph<MyVertex, MyEdge>) bag.create();
         return graph;
-    }
-
-    /** グラフ作成に必要なパラメータのgetterとsetter */
-
-    public int getNumEdgesToAttach() {
-        return this.numEdgesToAttach;
-    }
-
-    public void setNumEdgesToAttach(int num) {
-        this.numEdgesToAttach = num;
-    }
-
-    public int getNumTimeSteps() {
-        return this.numTimeSteps;
-    }
-
-    public void setNumTimeSteps(int num) {
-        this.numTimeSteps = num;
     }
 }
