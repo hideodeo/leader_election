@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="net.sf.jung:jung-graph-impl:2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="jung2-2_0_1" level="project" />
   </component>
 </module>
