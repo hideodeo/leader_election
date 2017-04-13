@@ -9,49 +9,61 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by Hideo on 2017/04/11.
- *
  * DFSTreeGenerator
  *
  * DFS treeを作成するクラス
  */
 public class DFSTreeGenerator implements TreeGenerator {
+    /** グラフ */
+    private MyGraph<MyVertex, MyEdge> graph;
+    /** ルートノード（探索の始点）*/
+    private MyVertex root;
 
-    MyGraph<MyVertex, MyEdge> graph;
-    ArrayList<GraphEvent.Edge> Tree;
-    MyVertex rootVertex;
-    int count = 0;
-    boolean label = false;
+    /**
+     * コンストラクタ
+     * @param graph グラフ
+     * @param root ルートノード
+     */
+    public DFSTreeGenerator(MyGraph<MyVertex, MyEdge> graph, MyVertex root) {
+        assert graph.containsVertex(root) : "the root vertex is not contained in the graph";
 
+        this.graph = graph;
+        this.root = root;
+    }
+
+    /**
+     * DFS木を返すメソッド
+     * @return DFS tree
+     */
     @Override
-    public void create(MyGraph graphIn) {
-        graph = graphIn;
+    public MyGraph<MyVertex, MyEdge> create() {
+        MyGraph<MyVertex, MyEdge> tree = new MyGraph<MyVertex, MyEdge>();
+        Deque<MyVertex> stack = new ArrayDeque<MyVertex>();
+        // ある頂点が探索済みかどうかを判別するために探索済みの頂点を保存するリスト
+        List<MyVertex> visitedVertexes = new ArrayList<MyVertex>();
 
-        for (MyVertex v : graph.getVertices()) {
-            v.setDFSLabel(false);
-        }
+        tree.addVertex(root);
+        visitedVertexes.add(root);
+        stack.offer(root);
 
-        for(MyVertex v: graph.getVertices()){
-            search(v);
-            break;
-        }
-
-        if (count == graph.getVertexCount()) label = true;
-        else label = false;
-    }
-
-    public Collection<GraphEvent.Edge> getTree() {
-        return Tree;
-    }
-
-    public void search(MyVertex v) {
-        count++;
-        v.setDFSLabel(true);
-        for (MyVertex w : graph.getNeighbors(v)) {
-
-            if (!w.getDFSLabel()) {
-                search(w);
+        while (!stack.isEmpty()) {
+            MyVertex r = stack.pollLast();
+            // vの隣接点のうち、未探索のノードを木に追加し探索済みにする
+            for(MyVertex v : this.graph.getNeighbors(r)) {
+                if(!visitedVertexes.contains(v)) {
+                    tree.addVertex(v);
+                    MyEdge e = this.graph.findEdge(r, v);
+                    tree.addEdge(e, r, v);
+                    visitedVertexes.add(v);
+                    stack.offer(v);
+                }
             }
         }
+
+        // 後片付け（必要かと言われれば要らない）
+        stack.clear();
+        visitedVertexes.clear();
+
+        return tree;
     }
 }
