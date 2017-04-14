@@ -12,6 +12,5 @@
     <orderEntry type="library" exported="" name="jung2-2_0_1" level="project" />
 =======
     <orderEntry type="library" name="net.sf.jung:jung-algorithms:2.0.1" level="project" />
->>>>>>> fcfa753ff1de835c7c6d8da2b34bbdae5a94298f
   </component>
 </module>

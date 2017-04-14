@@ -1,12 +1,13 @@
 package generators;
 
-import edu.uci.ics.jung.graph.event.GraphEvent;
+import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
-import entities.MyEdge;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * DFSTreeGenerator
@@ -44,10 +45,10 @@ public class DFSTreeGenerator implements TreeGenerator {
 
         tree.addVertex(root);
         visitedVertexes.add(root);
-        stack.offer(root);
+        stack.offerFirst(root);
 
         while (!stack.isEmpty()) {
-            MyVertex r = stack.pollLast();
+            MyVertex r = stack.pollFirst();
             // vの隣接点のうち、未探索のノードを木に追加し探索済みにする
             for(MyVertex v : this.graph.getNeighbors(r)) {
                 if(!visitedVertexes.contains(v)) {
@@ -55,7 +56,7 @@ public class DFSTreeGenerator implements TreeGenerator {
                     MyEdge e = this.graph.findEdge(r, v);
                     tree.addEdge(e, r, v);
                     visitedVertexes.add(v);
-                    stack.offer(v);
+                    stack.offerFirst(v);
                 }
             }
         }
