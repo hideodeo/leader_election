@@ -17,9 +17,9 @@ public class MyCycle {
         this.cycle = graph;
     }
 
-    public boolean isCycle(MyGraph<MyVertex, MyEdge> cycleIn){
+    private boolean isCycle(MyGraph<MyVertex, MyEdge> cycleIn){
         for (MyVertex v: cycleIn.getVertices()){
-            if (cycleIn.inDegree(v) != 2)
+            if (cycleIn.degree(v) != 2)
                 return false;
         }
         return true;
