@@ -4,10 +4,12 @@ import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
 
+import java.util.List;
+
 /**
  * Created by Hideo on 2017/04/14.
  */
-public class FundamentalCycleGenerator implements CycleGenerator {
+public class FundamentalCyclesGenerator implements CyclesGenerator {
     /** グラフ */
     private MyGraph<MyVertex, MyEdge> graph;
     /** ツリー（BFS/DFSにより生成）*/
@@ -18,7 +20,7 @@ public class FundamentalCycleGenerator implements CycleGenerator {
      * @param graphIn グラフ
      * @param treeIn ツリー
      */
-    public FundamentalCycleGenerator(MyGraph<MyVertex, MyEdge> graphIn, MyGraph<MyVertex, MyEdge> treeIn) {
+    public FundamentalCyclesGenerator(MyGraph<MyVertex, MyEdge> graphIn, MyGraph<MyVertex, MyEdge> treeIn) {
         this.graph = graphIn;
         this.tree = treeIn;
     }
@@ -28,7 +30,8 @@ public class FundamentalCycleGenerator implements CycleGenerator {
      * @return cycle
      */
     @Override
-    public MyGraph<MyVertex, MyEdge> create() {
+    public List<MyGraph<MyVertex, MyEdge>> create() {
+        MyGraph<MyVertex, MyEdge> cycle = new MyGraph<MyVertex, MyEdge>();
         return null;
     }
 }
