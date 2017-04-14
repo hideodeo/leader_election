@@ -12,8 +12,9 @@ public class MyCycle {
     /**
      * コンストラクタ
      */
-    public MyCycle(){
-
+    public MyCycle(MyGraph<MyVertex, MyEdge> graph){
+        assert isCycle(graph): "the graph is not cycle";
+        this.cycle = graph;
     }
 
     public boolean isCycle(MyGraph<MyVertex, MyEdge> cycleIn){
