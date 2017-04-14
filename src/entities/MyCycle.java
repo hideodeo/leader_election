@@ -8,4 +8,10 @@ package entities;
 public class MyCycle {
     /** グラフ */
     private MyGraph<MyVertex, MyEdge> cycle;
+    
+    /**
+     * コンストラクタ
+     */
+    public MyCycle(){
+    }
 }
