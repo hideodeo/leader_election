@@ -8,7 +8,6 @@ import org.apache.commons.collections15.Factory;
  * 頂点を表すクラス
  */
 public class MyVertex {
-
     /**
      * ファクトリを返すクラスメソッド
      * GraphGeneratorで使う

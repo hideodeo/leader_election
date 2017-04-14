@@ -10,11 +10,11 @@ import java.util.Deque;
 import java.util.List;
 
 /**
- * BFSTreeGenerator
+ * DFSTreeGenerator
  *
- * BFSで得られる木を作成するクラス
+ * DFS treeを作成するクラス
  */
-public class BFSTreeGenerator implements TreeGenerator {
+public class DFSTreeGenerator implements TreeGenerator {
     /** グラフ */
     private MyGraph<MyVertex, MyEdge> graph;
     /** ルートノード（探索の始点）*/
@@ -25,7 +25,7 @@ public class BFSTreeGenerator implements TreeGenerator {
      * @param graph グラフ
      * @param root ルートノード
      */
-    public BFSTreeGenerator(MyGraph<MyVertex, MyEdge> graph, MyVertex root) {
+    public DFSTreeGenerator(MyGraph<MyVertex, MyEdge> graph, MyVertex root) {
         assert graph.containsVertex(root) : "the root vertex is not contained in the graph";
 
         this.graph = graph;
@@ -33,22 +33,22 @@ public class BFSTreeGenerator implements TreeGenerator {
     }
 
     /**
-     * BFS木を返すメソッド
-     * @return BFS tree
+     * DFS木を返すメソッド
+     * @return DFS tree
      */
     @Override
     public MyGraph<MyVertex, MyEdge> create() {
         MyGraph<MyVertex, MyEdge> tree = new MyGraph<MyVertex, MyEdge>();
-        Deque<MyVertex> queue = new ArrayDeque<MyVertex>();
+        Deque<MyVertex> stack = new ArrayDeque<MyVertex>();
         // ある頂点が探索済みかどうかを判別するために探索済みの頂点を保存するリスト
         List<MyVertex> visitedVertexes = new ArrayList<MyVertex>();
 
         tree.addVertex(root);
         visitedVertexes.add(root);
-        queue.offer(root);
+        stack.offerFirst(root);
 
-        while (!queue.isEmpty()) {
-            MyVertex r = queue.poll();
+        while (!stack.isEmpty()) {
+            MyVertex r = stack.pollFirst();
             // vの隣接点のうち、未探索のノードを木に追加し探索済みにする
             for(MyVertex v : this.graph.getNeighbors(r)) {
                 if(!visitedVertexes.contains(v)) {
@@ -56,13 +56,13 @@ public class BFSTreeGenerator implements TreeGenerator {
                     MyEdge e = this.graph.findEdge(r, v);
                     tree.addEdge(e, r, v);
                     visitedVertexes.add(v);
-                    queue.offer(v);
+                    stack.offerFirst(v);
                 }
             }
         }
 
-        // 後片付け（必要かと言われれば要らないけど）
-        queue.clear();
+        // 後片付け（必要かと言われれば要らない）
+        stack.clear();
         visitedVertexes.clear();
 
         return tree;
