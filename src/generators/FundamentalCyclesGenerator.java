@@ -1,5 +1,6 @@
 package generators;
 
+import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
@@ -41,12 +42,12 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * @return list of cycles
      */
     @Override
-    public List<MyGraph<MyVertex, MyEdge>> create() {
-        List<MyGraph<MyVertex, MyEdge>> list = new ArrayList<MyGraph<MyVertex, MyEdge>>();
+    public List<MyCycle> create() {
+        List<MyCycle> list = new ArrayList<MyCycle>();
 
         for (MyEdge e : graph.getEdges()) {
             if (isComplimentEdge(e)) {
-                MyGraph<MyVertex, MyEdge> cycle = createCycle(e);
+                MyCycle cycle = createCycle(e);
                 list.add(cycle);
             }
         }
@@ -71,7 +72,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * 引数で受け取った補木辺から作成される基本タイセットを返す
      * @return a fundamental cycle
      */
-    private MyGraph<MyVertex, MyEdge> createCycle(MyEdge complimentEdge) {
+    private MyCycle createCycle(MyEdge complimentEdge) {
         // 木+補木辺で構成されるグラフを作成する
         MyGraph<MyVertex, MyEdge> subGraph = new MyGraph<MyVertex, MyEdge>();
         for (MyVertex v: tree.getVertices()){
@@ -95,16 +96,6 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
             }
         } while (didRemove);
 
-        // サイクルになっているか確認
-        for (MyVertex v : subGraph.getVertices()) {
-            assert subGraph.degree(v) == 2 : "Not all vertices's degree is 2";
-        }
-
-        // 辺リストをタイセットに変換
-        MyGraph<MyVertex, MyEdge> cycle = new MyGraph<MyVertex, MyEdge>();
-        for(MyEdge e: subGraph.getEdges()){
-            cycle.addEdge(e, subGraph.getEndpoints(e));
-        }
-        return cycle;
+        return new MyCycle(subGraph);
     }
 }

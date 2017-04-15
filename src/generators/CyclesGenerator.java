@@ -1,8 +1,7 @@
 package generators;
 
-import entities.MyEdge;
-import entities.MyGraph;
-import entities.MyVertex;
+import entities.MyCycle;
+
 import java.util.List;
 
 /**
@@ -15,5 +14,5 @@ public interface CyclesGenerator {
      * サイクルの集合を作成してリストで返すメソッド
      * @return サイクル集合のリスト
      */
-    List<MyGraph<MyVertex, MyEdge>> create();
+    List<MyCycle> create();
 }
