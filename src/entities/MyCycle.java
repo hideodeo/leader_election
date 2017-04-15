@@ -13,7 +13,7 @@ public class MyCycle {
      * コンストラクタ
      */
     public MyCycle(MyGraph<MyVertex, MyEdge> graph){
-        assert isCycle(graph): "the graph is not cycle";
+        assert isCycle(graph): "the graph is not cycle. Not all vertices's degree is 2. ";
         this.cycle = graph;
     }
 
