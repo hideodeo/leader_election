@@ -1,5 +1,8 @@
 package algorithms;
 
+import entities.MyVertex;
+import java.util.List;
+
 /**
  * Algorithm
  *
@@ -8,8 +11,8 @@ package algorithms;
 public interface Algorithm {
     /**
      * リーダーを選出するメソッド
-     *
-     * @param graph
-     * @param
+     * @return リーダー集合のリスト
      */
+
+    List<MyVertex> create();
 }
