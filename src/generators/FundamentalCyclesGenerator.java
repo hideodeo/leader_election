@@ -27,7 +27,6 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * @param treeIn ツリー
      */
     public FundamentalCyclesGenerator(MyGraph<MyVertex, MyEdge> graphIn, MyGraph<MyVertex, MyEdge> treeIn) {
-        this.graph = graphIn;
         this.tree = treeIn;
 
         /** treeがgraphのsubgraphであることを確認する*/
@@ -35,6 +34,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
         for (MyEdge e : tree.getEdges()) {
             assert graphEdges.contains(e): "tree is not a sub-graph of the original graph";
         }
+        this.graph = graphIn;
     }
 
     /**
@@ -60,12 +60,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * @return true if targetが補木辺
      */
     private boolean isComplimentEdge(MyEdge target) {
-        for (MyEdge  e : tree.getEdges()) {
-            if (target == e) {
-                return false;
-            }
-        }
-        return true;
+        return !tree.getEdges().contains(target);
     }
 
     /**
