@@ -1,19 +1,18 @@
 package calculators;
 
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
 import utils.ListUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * EvaluationFunctions
  *
- * 評価関数を計算するくらす
+ * 評価関数を計算するクラス
  */
 public class EvaluationFunctions {
     /**
@@ -25,7 +24,25 @@ public class EvaluationFunctions {
      * @return 目的関数
      */
     public static double objectiveFunction(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
-        return 0.0;
+        double sumOfLengths = 0;
+        for(MyCycle cycle : cycles) {
+            MyVertex leader = leaders.get(cycle);
+            List<MyCycle> neighbors = getNeighborsCycles(cycles, cycle);
+            // 隣接サイクルとの距離の総和を計算する
+            for(MyCycle neighbor : neighbors) {
+                MyVertex neighborsLeader = leaders.get(neighbor);
+                sumOfLengths += getLengthBetween(leader, neighborsLeader, graph);
+            }
+        }
+
+        // サイクル数を計算
+        int cyclesCount = leaders.values().size();
+        // リーダー数を計算
+        // Setは重複を許さないので自然に重複しているリーダーが消えるはず
+//        Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
+//        int leadersCount = leaderVertexes.size();
+
+        return sumOfLengths/cyclesCount;
     }
 
     /**
@@ -45,6 +62,18 @@ public class EvaluationFunctions {
             }
         }
         return neighbors;
+    }
+
+    /**
+     * 頂点間の距離を計算する
+     * @param s ソースノード
+     * @param t 宛先ノード
+     * @param graph グラフ
+     * @return 距離
+     */
+    private static int getLengthBetween(MyVertex s, MyVertex t, MyGraph<MyVertex, MyEdge> graph) {
+        DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>(graph);
+        return dd.getDistance(s, t).intValue();
     }
 
     /**
