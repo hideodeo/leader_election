@@ -34,24 +34,24 @@ public class RandomAlgorithm implements Algorithm {
     @Override
     public Map<MyCycle, MyVertex> solve() {
         Random rnd = new Random();
-        Map<MyCycle, MyVertex> map_best = new HashMap<MyCycle, MyVertex>();
+        Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
         int objectiveFunctionValue = Integer.MAX_VALUE;
 
         /** generation and comparison of 100 solutions*/
         for (int i=0;i<100;i++) {
-            Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
+            Map<MyCycle, MyVertex> leadersMap = new HashMap<MyCycle, MyVertex>();
 
             for (MyCycle c : cycleList) {
                 List<MyVertex> list = new ArrayList<MyVertex>(c.getVertices());
                 int leaderIndex = rnd.nextInt(list.size());
 
-                map.put(c, list.get(leaderIndex));
+                leadersMap.put(c, list.get(leaderIndex));
             }
 
-            if (objectiveFunction(map) < objectiveFunctionValue)
-                map_best = map;
+            if (EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap) < objectiveFunctionValue)
+                resultMap = leadersMap;
         }
 
-        return map_best;
+        return resultMap;
     }
 }
