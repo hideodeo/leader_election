@@ -127,7 +127,24 @@ public class EvaluationFunctions {
      * @return 1リーダーあたりの平均管理サイクル数
      */
     public static double averageLeaderCyclesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
-        return 0.0;
+        // キーがリーダー、値が管理しているサイクル数となるマップを作成する
+        Map<MyVertex, Integer> manageCyclesMap = new HashMap<MyVertex, Integer>();
+        for(Map.Entry<MyCycle, MyVertex> entry : leaders.entrySet()) {
+            // keyがなければnullを返すので0を代入してエラーを防ぐ
+            Integer manageCycleCount = manageCyclesMap.get(entry.getValue());
+            if (manageCycleCount == null) {
+                manageCycleCount = 0;
+            }
+            manageCyclesMap.put(entry.getValue(), ++manageCycleCount);
+        }
+
+        // 平均管理サイクル数を計算する
+        int leadersCount = manageCyclesMap.keySet().size();
+        double sum = 0.0;
+        for(Integer cyclesCount : manageCyclesMap.values()) {
+            sum += cyclesCount;
+        }
+        return sum / leadersCount;
     }
 
     /**
