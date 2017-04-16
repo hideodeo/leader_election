@@ -155,6 +155,25 @@ public class EvaluationFunctions {
      * @return 1リーダーあたりの平均管理頂点数
      */
     public static double averageLeaderVertexesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
-        return 0.0;
+        // キーがリーダー、値が管理している頂点集合となるマップを作成する
+        Map<MyVertex, Set<MyVertex>> manageVertexesMap = new HashMap<MyVertex, Set<MyVertex>>();
+        for(Map.Entry<MyCycle, MyVertex> entry : leaders.entrySet()) {
+            Set<MyVertex> vertexes = manageVertexesMap.get(entry.getValue());
+            if(vertexes == null) {
+                vertexes = new HashSet<MyVertex>();
+            }
+            for(MyVertex v : entry.getKey().asVertexList()) {
+                vertexes.add(v);
+            }
+            manageVertexesMap.put(entry.getValue(), vertexes);
+        }
+
+        // 平均管理頂点数を計算する
+        int leadersCount = manageVertexesMap.keySet().size();
+        double sum = 0.0;
+        for(Set<MyVertex> vertexes : manageVertexesMap.values()) {
+            sum += vertexes.size();
+        }
+        return sum / leadersCount;
     }
 }
