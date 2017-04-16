@@ -28,7 +28,11 @@ public class MyCycle {
         return this.cycle.getVertexCount();
     }
 
-    public List<MyVertex> asVertexList() {
+    /**
+     * 頂点集合をリストで返す
+     * @return 頂点集合
+     */
+    public List<MyVertex> getVerticesList() {
         return (List<MyVertex>) this.cycle.getVertices();
     }
 

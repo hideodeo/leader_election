@@ -56,7 +56,7 @@ public class EvaluationFunctions {
         List<MyCycle> neighbors = new ArrayList<MyCycle>();
         for(MyCycle c : cycles) {
             if(c.equals(cycle)) continue;
-            List product = ListUtils.product(c.asVertexList(), cycle.asVertexList());
+            List product = ListUtils.product(c.getVerticesList(), cycle.getVerticesList());
             if(0 < product.size()) {
                 neighbors.add(c);
             }
@@ -162,7 +162,7 @@ public class EvaluationFunctions {
             if(vertexes == null) {
                 vertexes = new HashSet<MyVertex>();
             }
-            for(MyVertex v : entry.getKey().asVertexList()) {
+            for(MyVertex v : entry.getKey().getVerticesList()) {
                 vertexes.add(v);
             }
             manageVertexesMap.put(entry.getValue(), vertexes);
