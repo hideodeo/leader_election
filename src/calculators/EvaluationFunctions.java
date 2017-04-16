@@ -95,7 +95,13 @@ public class EvaluationFunctions {
      * @return サイクルサイズの分散
      */
     public static double varianceOfCycleSize(List<MyCycle> cycles) {
-        return 0.0;
+        double average = averageCycleSize(cycles);
+        double sum = 0.0;
+        for(MyCycle c : cycles) {
+            double diff = average - c.getSize();
+            sum += diff * diff;
+        }
+        return sum / cycles.size();
     }
 
     /**
