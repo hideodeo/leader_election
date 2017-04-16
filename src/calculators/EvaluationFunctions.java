@@ -4,7 +4,9 @@ import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
+import utils.ListUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,12 +30,21 @@ public class EvaluationFunctions {
 
     /**
      * 隣接サイクルを返す
-     * @param graph グラフ
+     * 隣接 := 頂点を少なくとも一つ共有している
+     * @param cycles サイクル集合
      * @param cycle サイクル
      * @return 隣接サイクルの集合
      */
-    private static List<MyCycle> getNeighborsCycle(MyGraph<MyVertex, MyEdge> graph, MyCycle cycle) {
-        return null;
+    private static List<MyCycle> getNeighborsCycles(List<MyCycle> cycles, MyCycle cycle) {
+        List<MyCycle> neighbors = new ArrayList<MyCycle>();
+        for(MyCycle c : cycles) {
+            if(c.equals(cycle)) continue;
+            List product = ListUtils.product(c.asVertexList(), cycle.asVertexList());
+            if(0 < product.size()) {
+                neighbors.add(c);
+            }
+        }
+        return neighbors;
     }
 
     /**

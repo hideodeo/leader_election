@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 /**
  * MyCycle
  *
@@ -15,6 +17,10 @@ public class MyCycle {
     public MyCycle(MyGraph<MyVertex, MyEdge> graph){
         assert isCycle(graph): "the graph is not cycle. Not all vertices's degree is 2. ";
         this.cycle = graph;
+    }
+
+    public List<MyVertex> asVertexList() {
+        return (List<MyVertex>) this.cycle.getVertices();
     }
 
     private boolean isCycle(MyGraph<MyVertex, MyEdge> cycleIn){
