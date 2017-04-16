@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +35,7 @@ public class MyCycle {
      * @return 頂点集合
      */
     public List<MyVertex> getVerticesList() {
-        return (List<MyVertex>) this.cycle.getVertices();
+        return new ArrayList<MyVertex>(this.cycle.getVertices());
     }
 
     private boolean isCycle(MyGraph<MyVertex, MyEdge> cycleIn){
