@@ -82,7 +82,11 @@ public class EvaluationFunctions {
      * @return 平均サイクルサイズ
      */
     public static double averageCycleSize(List<MyCycle> cycles) {
-        return 0.0;
+        double sum = 0.0;
+        for(MyCycle c : cycles) {
+            sum += c.getSize();
+        }
+        return sum / cycles.size();
     }
 
     /**

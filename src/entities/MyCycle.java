@@ -19,6 +19,15 @@ public class MyCycle {
         this.cycle = graph;
     }
 
+    /**
+     * サイクルサイズを返す
+     * サイクルサイズ := 頂点数
+     * @return サイクルサイズ
+     */
+    public int getSize() {
+        return this.cycle.getVertexCount();
+    }
+
     public List<MyVertex> asVertexList() {
         return (List<MyVertex>) this.cycle.getVertices();
     }
