@@ -35,7 +35,13 @@ public class SharedVertexAlgorithm implements Algorithm {
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
-        Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
-        return map;
+        Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
+
+        /** vertexを共有する隣接サイクル数の計算*/
+        for(MyCycle cycle: cycleList){
+
+        }
+
+        return resultMap;
     }
 }

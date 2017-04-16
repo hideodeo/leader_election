@@ -37,7 +37,7 @@ public class RandomAlgorithm implements Algorithm {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
         int objectiveFunctionValue = Integer.MAX_VALUE;
 
-        /** generation and comparison of 100 solutions*/
+        /** generation of 100 solutions*/
         for (int i=0;i<100;i++) {
             Map<MyCycle, MyVertex> leadersMap = new HashMap<MyCycle, MyVertex>();
 
@@ -48,10 +48,14 @@ public class RandomAlgorithm implements Algorithm {
                 leadersMap.put(c, list.get(leaderIndex));
             }
 
-            if (EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap) < objectiveFunctionValue)
-                resultMap = leadersMap;
-        }
+            /** comparison of 100 solutions*/
+            int val = EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap);
 
+            if (val < objectiveFunctionValue) {
+                resultMap = leadersMap;
+                objectiveFunctionValue = val;
+            }
+        }
         return resultMap;
     }
 }

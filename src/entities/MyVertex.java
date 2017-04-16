@@ -8,6 +8,9 @@ import org.apache.commons.collections15.Factory;
  * 頂点を表すクラス
  */
 public class MyVertex {
+    /** # of adjacent cycles*/
+    private int numOfAdCycles;
+
     /**
      * ファクトリを返すクラスメソッド
      * GraphGeneratorで使う
@@ -20,5 +23,13 @@ public class MyVertex {
                 return new MyVertex();
             }
         };
+    }
+
+    public void setNumOfAdCycles(int numOfAdCycles) {
+        this.numOfAdCycles = numOfAdCycles;
+    }
+
+    public int getNumOfAdCycles(){
+        return numOfAdCycles;
     }
 }
