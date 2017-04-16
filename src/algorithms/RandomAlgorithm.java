@@ -33,15 +33,25 @@ public class RandomAlgorithm implements Algorithm {
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
-        Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
         Random rnd = new Random();
+        Map<MyCycle, MyVertex> map_best = new HashMap<MyCycle, MyVertex>();
+        int objectiveFunctionValue = Integer.MAX_VALUE;
 
-        for (MyCycle c: cycleList){
-            List<MyVertex> list = new ArrayList<MyVertex>(c.getVertices());
-            int leaderIndex = rnd.nextInt(list.size());
+        /** generation and comparison of 100 solutions*/
+        for (int i=0;i<100;i++) {
+            Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
 
-            map.put(c, list.get(leaderIndex));
+            for (MyCycle c : cycleList) {
+                List<MyVertex> list = new ArrayList<MyVertex>(c.getVertices());
+                int leaderIndex = rnd.nextInt(list.size());
+
+                map.put(c, list.get(leaderIndex));
+            }
+
+            if (objectiveFunction(map) < objectiveFunctionValue)
+                map_best = map;
         }
-        return map;
+
+        return map_best;
     }
 }
