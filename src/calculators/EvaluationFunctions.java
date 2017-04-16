@@ -6,6 +6,7 @@ import entities.MyGraph;
 import entities.MyVertex;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * EvaluationFunctions
@@ -13,67 +14,75 @@ import java.util.List;
  * 評価関数を計算するくらす
  */
 public class EvaluationFunctions {
-    /** グラフ */
-    private MyGraph<MyVertex, MyEdge> graph;
-    /** サイクル集合 */
-    private List<MyCycle> cycles;
-
-    /**
-     * コンストラクタ
-     * @param graph グラフ
-     * @param cycles サイクル集合
-     */
-    public EvaluationFunctions(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles) {
-        this.graph = graph;
-        this.cycles = cycles;
-    }
-
     /**
      * 目的関数を計算する
      * obj func = 隣接しているサイクルのリーダー達との距離の総和の総和 / (サイクル数 or リーダー数)
+     * @param graph グラフ
+     * @param cycles サイクル
+     * @param leaders リーダー
      * @return 目的関数
      */
-    public double objectiveFunction() {
+    public static double objectiveFunction(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
         return 0.0;
     }
 
     /**
+     * 隣接サイクルを返す
+     * @param graph グラフ
+     * @param cycle サイクル
+     * @return 隣接サイクルの集合
+     */
+    private static List<MyCycle> getNeighborsCycle(MyGraph<MyVertex, MyEdge> graph, MyCycle cycle) {
+        return null;
+    }
+
+    /**
      * 平均サイクルサイズを計算する
+     * @param cycles サイクル集合
      * @return 平均サイクルサイズ
      */
-    public double averageCycleSize() {
+    public static double averageCycleSize(List<MyCycle> cycles) {
         return 0.0;
     }
 
     /**
      * サイクルサイズの分散を計算する
+     * @param cycles サイクル集合
      * @return サイクルサイズの分散
      */
-    public double varianceOfCycleSize() {
+    public static double varianceOfCycleSize(List<MyCycle> cycles) {
         return 0.0;
     }
 
     /**
      * 平均隣接サイクル数を計算する
+     * @param graph グラフ
+     * @param cycle サイクル
      * @return 平均隣接サイクル数
      */
-    public double averageNeighborCyclesCount() {
+    public static double averageNeighborCyclesCount(MyGraph<MyVertex, MyEdge> graph, MyCycle cycle) {
         return 0.0;
     }
 
     /**
      * 1リーダーあたりの平均管理サイクル数を計算する
+     * @param graph グラフ
+     * @param cycles サイクル集合
+     * @param leaders リーダー
      * @return 1リーダーあたりの平均管理サイクル数
      */
-    public double averageLeaderCyclesCount() {
+    public static double averageLeaderCyclesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
         return 0.0;
     }
 
     /**
      * 1リーダーあたりの平均管理頂点数を計算する
+     * @param graph グラフ
+     * @param cycles サイクル集合
+     * @param leaders リーダー
      * @return 1リーダーあたりの平均管理頂点数
      */
-    public double averageLeaderVertexesCount() {
+    public static double averageLeaderVertexesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
         return 0.0;
     }
 }
