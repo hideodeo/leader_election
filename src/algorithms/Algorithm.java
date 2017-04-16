@@ -1,7 +1,9 @@
 package algorithms;
 
+import entities.MyCycle;
 import entities.MyVertex;
-import java.util.List;
+
+import java.util.Map;
 
 /**
  * Algorithm
@@ -14,5 +16,5 @@ public interface Algorithm {
      * @return リーダー集合のリスト
      */
 
-    List<MyVertex> create();
+    Map<MyCycle, MyVertex> solve();
 }

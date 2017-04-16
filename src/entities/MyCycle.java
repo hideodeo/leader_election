@@ -1,7 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,5 +44,13 @@ public class MyCycle {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * 頂点集合をCollectionで返す
+     * @return 頂点集合
+     */
+    public Collection<MyVertex> getVertices(){
+        return cycle.getVertices();
     }
 }

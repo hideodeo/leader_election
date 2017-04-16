@@ -5,14 +5,14 @@ import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * SharedVertex
- *
- * # of shared vertexesに基いてリーダを選ぶクラス
+ * SharedEdge
  */
-public class SharedVertex implements Algorithm {
+public class SharedEdgeAlgorithm implements Algorithm {
     /** graph */
     private MyGraph<MyVertex, MyEdge> graph;
     /** cycle set */
@@ -22,13 +22,18 @@ public class SharedVertex implements Algorithm {
      * @param graphIn グラフ
      * @param cycleListIn ルートノード
      */
-    public SharedVertex(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
+    public SharedEdgeAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
         this.cycleList = cycleListIn;
     }
 
+    /**
+     * リーダー集合を返すメソッド
+     * @return map
+     */
     @Override
-    public List<MyVertex> create() {
-        return null;
+    public Map<MyCycle, MyVertex> solve() {
+        Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
+        return map;
     }
 }
