@@ -107,11 +107,16 @@ public class EvaluationFunctions {
     /**
      * 平均隣接サイクル数を計算する
      * @param graph グラフ
-     * @param cycle サイクル
+     * @param cycles サイクル集合
      * @return 平均隣接サイクル数
      */
-    public static double averageNeighborCyclesCount(MyGraph<MyVertex, MyEdge> graph, MyCycle cycle) {
-        return 0.0;
+    public static double averageNeighborCyclesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles) {
+        double sum = 0.0;
+        for(MyCycle c : cycles) {
+            List<MyCycle> neighbors = getNeighborsCycles(cycles, c);
+            sum += neighbors.size();
+        }
+        return sum / cycles.size();
     }
 
     /**
