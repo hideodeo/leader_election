@@ -105,6 +105,16 @@ public class EvaluationFunctions {
     }
 
     /**
+     * サイクルサイズの標準偏差を計算する
+     * @param cycles サイクル集合
+     * @return サイクルサイズの標準偏差
+     */
+    public static double standardDeviationOfCycleSize(List<MyCycle> cycles) {
+      double variance = varianceOfCycleSize(cycles);
+      return Math.sqrt(variance);
+    }
+
+    /**
      * 平均隣接サイクル数を計算する
      * @param graph グラフ
      * @param cycles サイクル集合
