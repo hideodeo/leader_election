@@ -30,7 +30,7 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
      * 頂点間の距離を計算する
      * @param s ソースノード
      * @param t 宛先ノード
-     * @return 距離
+     * @return distance
      */
     public int getDistanceBetween(MyVertex s, MyVertex t) {
         DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
