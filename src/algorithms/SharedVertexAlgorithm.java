@@ -38,6 +38,10 @@ public class SharedVertexAlgorithm implements Algorithm {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
 
         /** vertexを共有する隣接サイクル数の計算*/
+        for (MyVertex v : graph.getVertices()){
+            v.setNumOfAdCycles(0);
+        }
+
         for (MyCycle cycle: cycleList){
             for (MyVertex v: cycle.getVertices()){
                 v.setNumOfAdCycles(v.getNumOfAdCycles() + 1);
@@ -46,13 +50,12 @@ public class SharedVertexAlgorithm implements Algorithm {
 
         /** サイクルごとにリーダーを選出*/
         for (MyCycle cycle: cycleList){
-            MyVertex leader = new MyVertex();
+            MyVertex leader = null;
             for (MyVertex v: cycle.getVertices()){
                 if (leader == null)
                     leader = v;
-                else if (v.getNumOfAdCycles() > leader.getNumOfAdCycles()){
+                else if (leader.getNumOfAdCycles() < v.getNumOfAdCycles())
                     leader = v;
-                }
             }
             resultMap.put(cycle, leader);
         }

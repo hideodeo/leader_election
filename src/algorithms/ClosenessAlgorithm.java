@@ -41,7 +41,7 @@ public class ClosenessAlgorithm implements Algorithm {
 
         /** サイクルごとにリーダーを選出*/
         for (MyCycle cycle: cycleList){
-            MyVertex leader = new MyVertex();
+            MyVertex leader = null;
             for (MyVertex v: cycle.getVertices()){
                 if (leader == null)
                     leader = v;

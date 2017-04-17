@@ -9,8 +9,9 @@ import org.apache.commons.collections15.Factory;
  */
 public class MyVertex {
     /** # of adjacent cycles*/
-    private int numOfAdCycles;
-    private double closenessCentrality;
+    private int numOfAdCycles = 0;
+    /** value of closeness centrality*/
+    private double closenessCentrality = 0;
 
     /**
      * ファクトリを返すクラスメソッド
