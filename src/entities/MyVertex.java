@@ -10,6 +10,7 @@ import org.apache.commons.collections15.Factory;
 public class MyVertex {
     /** # of adjacent cycles*/
     private int numOfAdCycles;
+    private double closenessCentrality;
 
     /**
      * ファクトリを返すクラスメソッド
@@ -31,5 +32,13 @@ public class MyVertex {
 
     public int getNumOfAdCycles(){
         return numOfAdCycles;
+    }
+
+    public void setClosenessCentrality(double closenessCentrality) {
+        this.closenessCentrality = closenessCentrality;
+    }
+
+    public double getClosenessCentrality() {
+        return closenessCentrality;
     }
 }

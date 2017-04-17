@@ -34,12 +34,10 @@ public class ClosenessAlgorithm implements Algorithm {
     @Override
     public Map<MyCycle, MyVertex> solve() {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
-        Map<MyVertex, Double> closenessMap = new HashMap<MyVertex, Double>();
 
         /** calculate closeness centrality for each vertex*/
-        for (MyVertex v: graph.getVertices()){
-
-        }
+        for (MyVertex v: graph.getVertices())
+            v.setClosenessCentrality(caluculateClosenessCentrality(v));
 
         /** サイクルごとにリーダーを選出*/
         for (MyCycle cycle: cycleList){
@@ -47,10 +45,7 @@ public class ClosenessAlgorithm implements Algorithm {
             for (MyVertex v: cycle.getVertices()){
                 if (leader == null)
                     leader = v;
-                else if (leader < v){
-                    leader = v;
-                }
-                else if ( < v){
+                else if (leader.getClosenessCentrality() < v.getClosenessCentrality()){
                     leader = v;
                 }
             }
@@ -59,7 +54,21 @@ public class ClosenessAlgorithm implements Algorithm {
         return resultMap;
     }
 
+    /**
+     * closeness centralityを計算するメソッド
+     * @param v vertex
+     * @return value of closeness centrality
+     */
     public double caluculateClosenessCentrality(MyVertex v){
+        double denominator = 0;
+        double numerator = 0;
 
+        for (MyVertex i: graph.getVertices()){
+            if (i != v) {
+                denominator += graph.getDistanceBetween(v, i);
+            }
+        }
+        numerator = graph.getVertexCount() - 1;
+        return numerator / denominator;
     }
 }

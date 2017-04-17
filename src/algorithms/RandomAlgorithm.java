@@ -1,5 +1,6 @@
 package algorithms;
 
+import calculators.EvaluationFunctions;
 import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
@@ -35,7 +36,7 @@ public class RandomAlgorithm implements Algorithm {
     public Map<MyCycle, MyVertex> solve() {
         Random rnd = new Random();
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
-        int objectiveFunctionValue = Integer.MAX_VALUE;
+        double objectiveFunctionValue = Double.MAX_VALUE;
 
         /** generation of 100 solutions*/
         for (int i=0;i<100;i++) {
@@ -49,7 +50,7 @@ public class RandomAlgorithm implements Algorithm {
             }
 
             /** comparison of 100 solutions*/
-            int val = EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap);
+            double val = EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap);
 
             if (val < objectiveFunctionValue) {
                 resultMap = leadersMap;
