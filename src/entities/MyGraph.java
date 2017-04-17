@@ -1,5 +1,6 @@
 package entities;
 
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import org.apache.commons.collections15.Factory;
@@ -23,5 +24,16 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
                 return new MyGraph<MyVertex, MyEdge>();
             }
         };
+    }
+
+    /**
+     * 頂点間の距離を計算する
+     * @param s ソースノード
+     * @param t 宛先ノード
+     * @return distance
+     */
+    public int getDistanceBetween(MyVertex s, MyVertex t) {
+        DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
+        return dd.getDistance(s, t).intValue();
     }
 }

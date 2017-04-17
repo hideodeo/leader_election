@@ -1,6 +1,5 @@
 package calculators;
 
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
@@ -31,7 +30,7 @@ public class EvaluationFunctions {
             // 隣接サイクルとの距離の総和を計算する
             for(MyCycle neighbor : neighbors) {
                 MyVertex neighborsLeader = leaders.get(neighbor);
-                sumOfLengths += getLengthBetween(leader, neighborsLeader, graph);
+                sumOfLengths += graph.getDistanceBetween(leader, neighborsLeader);
             }
         }
 
@@ -62,18 +61,6 @@ public class EvaluationFunctions {
             }
         }
         return neighbors;
-    }
-
-    /**
-     * 頂点間の距離を計算する
-     * @param s ソースノード
-     * @param t 宛先ノード
-     * @param graph グラフ
-     * @return 距離
-     */
-    private static int getLengthBetween(MyVertex s, MyVertex t, MyGraph<MyVertex, MyEdge> graph) {
-        DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>(graph);
-        return dd.getDistance(s, t).intValue();
     }
 
     /**
