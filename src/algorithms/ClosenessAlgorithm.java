@@ -33,7 +33,10 @@ public class ClosenessAlgorithm implements Algorithm {
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
-        Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
-        return map;
+        Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
+
+        /** calculate closeness centrality for each vertex*/
+        for (MyVertex v: )
+        return resultMap;
     }
 }

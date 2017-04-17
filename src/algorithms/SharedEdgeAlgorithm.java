@@ -33,7 +33,31 @@ public class SharedEdgeAlgorithm implements Algorithm {
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
-        Map<MyCycle, MyVertex> map = new HashMap<MyCycle, MyVertex>();
-        return map;
+        Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
+
+        /** initialize NumOfAdCycles*/
+        for (MyVertex v : graph.getVertices()){
+            v.setNumOfAdCycles(0);
+        }
+
+        /** vertexを共有する隣接サイクル数の計算*/
+        for (MyCycle cycle: cycleList){
+            for (MyVertex v: cycle.getVertices()){
+                v.setNumOfAdCycles(v.getNumOfAdCycles() + 1);
+            }
+        }
+
+        /** サイクルごとにリーダーを選出*/
+        for (MyCycle cycle: cycleList){
+            MyVertex leader = null;
+            for (MyVertex v: cycle.getVertices()){
+                if (leader == null)
+                    leader = v;
+                else if (leader.getNumOfAdCycles() < v.getNumOfAdCycles())
+                    leader = v;
+            }
+            resultMap.put(cycle, leader);
+        }
+        return resultMap;
     }
 }
