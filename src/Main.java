@@ -24,12 +24,20 @@ public class Main {
         for (int i=0; i < simulationTimes; i++) {
             /** set number of vertexes */
             for (int vertexNum=20; i<=100; i+=20) {
-                excute("NWS", "BFS", vertexNum, "Random");
+                execute("NWS", "BFS", vertexNum, "Random");
             }
         }
     }
 
-    public static void excute(String graphNameIn, String treeNameIn, int vertexNumIn, String algorithmNameIn) {
+    /**
+     * This method executes a simulation.
+     *
+     * @param graphNameIn
+     * @param treeNameIn
+     * @param vertexNumIn
+     * @param algorithmNameIn
+     */
+    public static void execute(String graphNameIn, String treeNameIn, int vertexNumIn, String algorithmNameIn) {
         /** create graph */
         MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn).create();
 
@@ -76,6 +84,13 @@ public class Main {
         return null;
     }
 
+    /**
+     * return algorithm instance according to algorithm name
+     * @param algorithmNameIn
+     * @param graphIn
+     * @param cyclesIn
+     * @return algorithm
+     */
     public static Algorithm getAlgorithm (String algorithmNameIn, MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cyclesIn){
         if (algorithmNameIn == "SharedVertex")
             return new SharedVertexAlgorithm(graphIn, cyclesIn);
