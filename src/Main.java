@@ -1,3 +1,4 @@
+import algorithms.Algorithm;
 import algorithms.RandomAlgorithm;
 import algorithms.SharedVertexAlgorithm;
 import entities.MyCycle;
@@ -29,48 +30,57 @@ public class Main {
     }
 
     public static void excute(String graphNameIn, String treeNameIn, int vertexNumIn, String algorithmNameIn) {
-        /** initialization */
-        MyGraph<MyVertex, MyEdge> graph = new MyGraph<MyVertex, MyEdge>();
-        List<MyVertex> vertexList;
-        MyGraph<MyVertex, MyEdge> tree = new MyGraph<MyVertex, MyEdge>();
-        List<MyCycle> cycles;
-        Map<MyCycle, MyVertex> leadersMap;
-
         /** create graph */
-        if (graphNameIn == "NWS") {
-            NWSGraphGenerator NWSGenerator = new NWSGraphGenerator(vertexNumIn);
-            graph = NWSGenerator.create();
-        }
-        else if (graphNameIn == "BA"){
-            BAGraphGenerator BAGenerator = new BAGraphGenerator(vertexNumIn);
-            graph = BAGenerator.create();
-        }
+        MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn).create();
 
         /** get vertexes from graph */
-        vertexList = new ArrayList<MyVertex>(graph.getVertices());
+        List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
 
         /** create tree */
-        if (treeNameIn == "BFS") {
-            BFSTreeGenerator BFSTreeGenerator = new BFSTreeGenerator(graph, vertexList.get(0));
-            tree = BFSTreeGenerator.create();
-        }
-        else if (treeNameIn == "DFS"){
-            DFSTreeGenerator DFSTreeGenerator = new DFSTreeGenerator(graph, vertexList.get(0));
-            tree = DFSTreeGenerator.create();
-        }
+        MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeNameIn, graph, vertexList.get(0)).create();
 
         /** create cycles */
         FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
-        cycles = cyclesGenerator.create();
+        List<MyCycle> cycles = cyclesGenerator.create();
 
         /** elect leaders */
-        if (algorithmNameIn == "SharedVertex") {
-            SharedVertexAlgorithm al = new SharedVertexAlgorithm(graph, cycles);
-            leadersMap = al.solve();
-        }
-        else if (algorithmNameIn == "Random") {
-            RandomAlgorithm al = new RandomAlgorithm(graph, cycles);
-            leadersMap = al.solve();
-        }
+        Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
+    }
+
+    /**
+     * return graph generator according to graph name
+     *
+     * @param graphNameIn
+     * @param vertexNumIn
+     * @return graph generator
+     */
+    public static GraphGenerator getGraphGenerator (String graphNameIn, int vertexNumIn){
+        if (graphNameIn == "NWS")
+            return new NWSGraphGenerator(vertexNumIn);
+        else if (graphNameIn == "BA")
+            return new BAGraphGenerator(vertexNumIn);
+        return null;
+    }
+
+    /**
+     * return tree generator according to tree name
+     * @param treeNameIn
+     * @param rootIn
+     * @return tree generator
+     */
+    public static TreeGenerator getTreeGenerator (String treeNameIn, MyGraph<MyVertex, MyEdge> graphIn, MyVertex rootIn){
+        if (treeNameIn == "BFS")
+            return new BFSTreeGenerator(graphIn, rootIn);
+        else if (treeNameIn == "DFS")
+            return new DFSTreeGenerator(graphIn, rootIn);
+        return null;
+    }
+
+    public static Algorithm getAlgorithm (String algorithmNameIn, MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cyclesIn){
+        if (algorithmNameIn == "SharedVertex")
+            return new SharedVertexAlgorithm(graphIn, cyclesIn);
+        else if (algorithmNameIn == "Random")
+             return new RandomAlgorithm(graphIn, cyclesIn);
+        return null;
     }
 }
