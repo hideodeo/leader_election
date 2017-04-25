@@ -71,7 +71,7 @@ public class EvaluationFunctions {
     public static double averageCycleSize(List<MyCycle> cycles) {
         double sum = 0.0;
         for(MyCycle c : cycles) {
-            sum += c.getSize();
+            sum += c.size();
         }
         return sum / cycles.size();
     }
@@ -85,7 +85,7 @@ public class EvaluationFunctions {
         double average = averageCycleSize(cycles);
         double sum = 0.0;
         for(MyCycle c : cycles) {
-            double diff = average - c.getSize();
+            double diff = average - c.size();
             sum += diff * diff;
         }
         return sum / cycles.size();
