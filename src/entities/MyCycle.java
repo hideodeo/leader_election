@@ -26,7 +26,7 @@ public class MyCycle {
      * サイクルサイズ := 頂点数
      * @return サイクルサイズ
      */
-    public int getSize() {
+    public int size() {
         return this.cycle.getVertexCount();
     }
 
