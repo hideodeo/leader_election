@@ -16,7 +16,7 @@ import java.util.*;
 public class EvaluationFunctions {
     /**
      * 目的関数を計算する
-     * obj func = 隣接しているサイクルのリーダー達との距離の総和の総和 / (サイクル数 or リーダー数)
+     * obj func = 隣接しているサイクルのリーダー達との距離の総和の総和 / リーダー数
      * @param graph グラフ
      * @param cycles サイクル
      * @param leaders リーダー

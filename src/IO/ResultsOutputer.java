@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * ResultsOutputer
@@ -59,7 +60,7 @@ public class ResultsOutputer {
      * ファイルに出力する
      * TODO: 出力に必要なデータを受け取る
      */
-    public void write() {
+    public void write(List<List<Double>> lists) {
         PrintWriter pw;
         try {
             FileWriter fw = new FileWriter(getFullPath(), true);
@@ -74,7 +75,12 @@ public class ResultsOutputer {
         pw.println();
 
         // 実行結果を出力する
-
+        for (int i = 0; i < lists.get(0).size(); i++) {
+            for (List<Double> list : lists) {
+                pw.print(list.get(i) + ",");
+            }
+            pw.println();
+        }
 
         // close file
         pw.close();
@@ -88,7 +94,7 @@ public class ResultsOutputer {
         Date now = new Date();
         DateFormat dfYMD = new SimpleDateFormat("YYYYMMDD");
         DateFormat dfHMS = new SimpleDateFormat("hhmmss");
-        // (例) 20180417T102530_NWS_30_BFS_Random.csv
+        // ex. 20180417T102530_NWS_30_BFS_Random.csv
         return dfYMD.format(now) + "T" + dfHMS.format(now) + "_" + graphType + "_" + vertexCount + "_" + treeType + "_" + algoType + ".csv";
     }
 }
