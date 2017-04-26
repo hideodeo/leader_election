@@ -74,7 +74,7 @@ public class ResultsOutputer {
         pw.print(graphType + ", " + vertexCount + ", " + treeType + ", " + algoType + ",");
         pw.println();
 
-        // 実行結果を出力する
+        // write data 
         for (int i = 0; i < lists.get(0).size(); i++) {
             for (List<Double> list : lists) {
                 pw.print(list.get(i) + ",");
