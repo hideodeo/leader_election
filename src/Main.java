@@ -1,7 +1,9 @@
 import algorithms.Algorithm;
 import algorithms.RandomAlgorithm;
 import algorithms.SharedVertexAlgorithm;
+
 import calculators.EvaluationFunctions;
+
 import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
@@ -29,7 +31,7 @@ public class Main {
     }
 
     /**
-     * method to execute a simulation.
+     * This method executes a simulation.
      *
      * @param graphNameIn
      * @param treeNameIn
