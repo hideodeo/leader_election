@@ -18,14 +18,16 @@ import java.util.Map;
  */
 public class Main {
     public static void main(String[] args) {
+        System.out.println("Simulation started.");
         /** parameters for simulation */
-        int simulationTimes = 10;
-        int initialNumOfVertex = 20, maxNumOfVertex = 60, incrementalNumOfVertex = 20;
+        int simulationTimes = 1;
+        int initialNumOfVertex = 20, maxNumOfVertex = 40, incrementalNumOfVertex = 20;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
         execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
+        System.out.println("Simulation finished.");
     }
 
     /**
@@ -70,6 +72,10 @@ public class Main {
                 FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
                 List<MyCycle> cycles = cyclesGenerator.create();
 
+                /** calculate and set adjacent cycles */
+                for (MyCycle cycle: cycles)
+                    cycle.setAdjacentCycles(cycles);
+
                 /** elect leaders */
                 Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
 
@@ -78,6 +84,9 @@ public class Main {
             }
             /** calculate average values following the number of simulation */
             valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) / simulationTimesIn);
+
+            System.out.println("av values of OF: " + valueOfObjectiveFunction.get(i) / simulationTimesIn);
+            System.out.println("# of vertexes: " + vertexNumIn.get(i));
         }
         dataLists.add(valueOfObjectiveFunction);
 
@@ -99,6 +108,8 @@ public class Main {
             return new NWSGraphGenerator(vertexNumIn);
         else if (graphNameIn == "BA")
             return new BAGraphGenerator(vertexNumIn);
+        else if (graphNameIn == "Lattice")
+            return new LatticeGraphGenerator(vertexNumIn);
         return null;
     }
 

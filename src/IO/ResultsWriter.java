@@ -20,7 +20,7 @@ public class ResultsWriter {
     public void write(List<List<Double>> lists, String filePath, String... headers) {
         PrintWriter pw;
         try {
-            FileWriter fw = new FileWriter(getFullPath(), true);
+            FileWriter fw = new FileWriter(filePath, false);
             pw = new PrintWriter(new BufferedWriter(fw));
         } catch ( IOException ex ) {
             System.out.println("ファイルの出力に失敗しました");
@@ -51,7 +51,8 @@ public class ResultsWriter {
      */
     public String getFullPath(String... names){
         /** ex. NWS_30_BFS_Random.csv */
-        String path = "../simulationData";
+        String path = "simulationsData/";
+
         for (int i=0; i<names.length; i++){
             if (i != names.length-1)
                 path += names[i] + "_";
