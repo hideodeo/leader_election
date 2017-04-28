@@ -39,7 +39,6 @@ public class RandomAlgorithm implements Algorithm {
         double objectiveFunctionValue = Double.MAX_VALUE;
 
         /** generation of 100 solutions*/
-        int co=0;
         for (int i=0;i<100;i++) {
             Map<MyCycle, MyVertex> leadersMap = new HashMap<MyCycle, MyVertex>();
 
@@ -59,8 +58,6 @@ public class RandomAlgorithm implements Algorithm {
                 resultMap = leadersMap;
                 objectiveFunctionValue = val;
             }
-            System.out.println(co);
-            co++;
         }
         return resultMap;
     }
