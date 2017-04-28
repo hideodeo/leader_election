@@ -30,7 +30,7 @@ public class EvaluationFunctions {
             // 隣接サイクルとの距離の総和を計算する
             for(MyCycle neighbor : neighbors) {
                 MyVertex neighborsLeader = leaders.get(neighbor);
-                sumOfLengths += graph.getDistanceBetween(leader, neighborsLeader);
+                sumOfLengths += graph.getDistanceFromMap(leader, neighborsLeader);
             }
             result += sumOfLengths / neighbors.size();
             sumOfLengths = 0;

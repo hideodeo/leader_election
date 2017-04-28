@@ -62,6 +62,9 @@ public class Main {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
 
+                /** set distances between all vertex pairs. call this method right after creating a graph. */
+                graph.setDistancesBetweenAllPairs();
+
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
 

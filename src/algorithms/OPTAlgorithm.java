@@ -55,7 +55,6 @@ public class OPTAlgorithm implements Algorithm {
                 objectiveFunctionValue = val;
             }
         }
-
         return resultMap;
     }
 
