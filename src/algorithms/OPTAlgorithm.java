@@ -6,7 +6,6 @@ import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,23 +38,29 @@ public class OPTAlgorithm implements Algorithm {
     public Map<MyCycle, MyVertex> solve() {
         /** initialization */
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
-        List<Map<MyCycle, MyVertex>> allCombinationOfLeaders = new ArrayList<Map<MyCycle, MyVertex>>();
-        Map<MyCycle, MyVertex> currentMap = new HashMap<MyCycle, MyVertex>();
         double objectiveFunctionValue = Double.MAX_VALUE;
 
-        /** enumerate all solution */
-        generateAllCombinationOfLeaders(cycleList, allCombinationOfLeaders, 0, currentMap);
+        /** select best solution by comparing all combinations of leaders */
+        selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>(), objectiveFunctionValue);
 
-        /** select best solution by comparing all*/
-        for (Map<MyCycle, MyVertex> leadersMap: allCombinationOfLeaders){
-            double val = EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap);
+        return resultMap;
+    }
 
+    private void selectBestSolution(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current, double objectiveFunctionValue)
+    {
+        if(depth == cycles.size())
+        {
+            double val = EvaluationFunctions.objectiveFunction(graph, cycles, current);
             if (val < objectiveFunctionValue) {
-                resultMap = leadersMap;
+                resultMap.putAll(current);
                 objectiveFunctionValue = val;
             }
+            return;
         }
-        return resultMap;
+        for(MyVertex v: cycles.get(depth).getVertices()){
+            current.put(cycles.get(depth), v);
+            selectBestSolution(cycles, resultMap, depth + 1, current, objectiveFunctionValue);
+        }
     }
 
     /**
@@ -68,7 +73,7 @@ public class OPTAlgorithm implements Algorithm {
      * @param depth
      * @param current
      */
-    private void generateAllCombinationOfLeaders(List<MyCycle> cycles, List<Map<MyCycle, MyVertex>> result, int depth, Map<MyCycle, MyVertex> current)
+    /**private void generateAllCombinationOfLeaders1(List<MyCycle> cycles, List<Map<MyCycle, MyVertex>> result, int depth, Map<MyCycle, MyVertex> current)
     {
         if(depth == cycles.size())
         {
@@ -78,7 +83,7 @@ public class OPTAlgorithm implements Algorithm {
 
         for (MyVertex v: cycles.get(depth).getVertices()){
             current.put(cycles.get(depth), v);
-            generateAllCombinationOfLeaders(cycles, result, depth + 1, current);
+            selectBestSolution(cycles, result, depth + 1, current);
         }
-    }
+    }*/
 }

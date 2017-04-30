@@ -21,7 +21,7 @@ public class Main {
         System.out.println("Simulation started.");
         /** parameters for simulation */
         int simulationTimes = 1;
-        int initialNumOfVertex = 20, maxNumOfVertex = 60, incrementalNumOfVertex = 20;
+        int initialNumOfVertex = 10, maxNumOfVertex = 20, incrementalNumOfVertex = 10;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
@@ -58,6 +58,7 @@ public class Main {
 
         /** execute simulations for leader election */
         for (int i=0; i < vertexNumIn.size(); i++) {
+            System.out.println("# of vertexes: " + vertexNumIn.get(i));
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
@@ -86,7 +87,6 @@ public class Main {
             valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) / simulationTimesIn);
 
             System.out.println("av values of OF: " + valueOfObjectiveFunction.get(i) / simulationTimesIn);
-            System.out.println("# of vertexes: " + vertexNumIn.get(i));
         }
         dataLists.add(valueOfObjectiveFunction);
 

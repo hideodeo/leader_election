@@ -48,11 +48,9 @@ public class RandomAlgorithm implements Algorithm {
 
                 leadersMap.put(c, list.get(leaderIndex));
             }
-            System.out.println("cycle");
 
             /** comparison of 100 solutions*/
             double val = EvaluationFunctions.objectiveFunction(graph, cycleList, leadersMap);
-            System.out.println("done with obF");
 
             if (val < objectiveFunctionValue) {
                 resultMap = leadersMap;
