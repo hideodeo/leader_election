@@ -4,7 +4,6 @@ import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
 import entities.MyVertex;
-import utils.ListUtils;
 
 import java.util.*;
 
@@ -16,7 +15,7 @@ import java.util.*;
 public class EvaluationFunctions {
     /**
      * 目的関数を計算する
-     * obj func = 隣接しているサイクルのリーダー達との距離の総和の総和 / (サイクル数 or リーダー数)
+     * obj func = （隣接しているサイクルのリーダー達との距離の総和 / 隣接しているサイクル数 の総和）/ 全サイクル数
      * @param graph グラフ
      * @param cycles サイクル
      * @param leaders リーダー
@@ -24,43 +23,27 @@ public class EvaluationFunctions {
      */
     public static double objectiveFunction(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
         double sumOfLengths = 0;
+        double result = 0;
         for(MyCycle cycle : cycles) {
             MyVertex leader = leaders.get(cycle);
-            List<MyCycle> neighbors = getNeighborsCycles(cycles, cycle);
+            List<MyCycle> neighbors = cycle.getAdjacentCycles();
             // 隣接サイクルとの距離の総和を計算する
             for(MyCycle neighbor : neighbors) {
                 MyVertex neighborsLeader = leaders.get(neighbor);
                 sumOfLengths += graph.getDistanceBetween(leader, neighborsLeader);
             }
+            result += sumOfLengths / neighbors.size();
+            sumOfLengths = 0;
         }
 
         // サイクル数を計算
         int cyclesCount = leaders.values().size();
-        // リーダー数を計算
-        // Setは重複を許さないので自然に重複しているリーダーが消えるはず
-//        Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
-//        int leadersCount = leaderVertexes.size();
+        /** リーダー数を計算. Setは重複を許さないので自然に重複しているリーダーが消えるはず
+        Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
+        int leadersCount = leaderVertexes.getVertexCount(); */
 
-        return sumOfLengths/cyclesCount;
-    }
-
-    /**
-     * 隣接サイクルを返す
-     * 隣接 := 頂点を少なくとも一つ共有している
-     * @param cycles サイクル集合
-     * @param cycle サイクル
-     * @return 隣接サイクルの集合
-     */
-    private static List<MyCycle> getNeighborsCycles(List<MyCycle> cycles, MyCycle cycle) {
-        List<MyCycle> neighbors = new ArrayList<MyCycle>();
-        for(MyCycle c : cycles) {
-            if(c.equals(cycle)) continue;
-            List product = ListUtils.product(c.getVerticesList(), cycle.getVerticesList());
-            if(0 < product.size()) {
-                neighbors.add(c);
-            }
-        }
-        return neighbors;
+        result /= cyclesCount;
+        return result;
     }
 
     /**
@@ -71,7 +54,7 @@ public class EvaluationFunctions {
     public static double averageCycleSize(List<MyCycle> cycles) {
         double sum = 0.0;
         for(MyCycle c : cycles) {
-            sum += c.getSize();
+            sum += c.getVertexCount();
         }
         return sum / cycles.size();
     }
@@ -85,7 +68,7 @@ public class EvaluationFunctions {
         double average = averageCycleSize(cycles);
         double sum = 0.0;
         for(MyCycle c : cycles) {
-            double diff = average - c.getSize();
+            double diff = average - c.getVertexCount();
             sum += diff * diff;
         }
         return sum / cycles.size();
@@ -110,7 +93,7 @@ public class EvaluationFunctions {
     public static double averageNeighborCyclesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles) {
         double sum = 0.0;
         for(MyCycle c : cycles) {
-            List<MyCycle> neighbors = getNeighborsCycles(cycles, c);
+            List<MyCycle> neighbors = c.getAdjacentCycles();
             sum += neighbors.size();
         }
         return sum / cycles.size();

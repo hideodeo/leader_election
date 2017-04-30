@@ -21,8 +21,6 @@ public class ListUtils {
             for(Object b : l2) {
                 if(a.equals(b)) {
                     result.add(a);
-                    l1.remove(a);
-                    l2.remove(b);
                 }
             }
         }

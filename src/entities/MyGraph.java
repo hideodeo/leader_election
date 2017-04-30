@@ -1,9 +1,11 @@
 package entities;
 
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import org.apache.commons.collections15.Factory;
+
+import java.util.*;
 
 /**
  * MyGraph
@@ -11,6 +13,7 @@ import org.apache.commons.collections15.Factory;
  * グラフを表すクラス
  */
 public class MyGraph<V, E> extends SparseGraph<V, E> {
+    private Map<Set<MyVertex>, Integer> distanceMap = new HashMap<Set<MyVertex>, Integer>();
 
     /**
      * ファクトリを返すクラスメソッド
@@ -27,13 +30,25 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     }
 
     /**
-     * 頂点間の距離を計算する
-     * @param s ソースノード
-     * @param t 宛先ノード
+     * return distance from the map if it is previously calculated.
+     * If not, calculate and add distance to the map. Then, return it.
+     * @param s
+     * @param t
      * @return distance
      */
     public int getDistanceBetween(MyVertex s, MyVertex t) {
-        DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
-        return dd.getDistance(s, t).intValue();
+        Set<MyVertex> vertexPair = new HashSet<MyVertex>();
+        vertexPair.add(s);
+        vertexPair.add(t);
+
+        if (distanceMap.containsKey(vertexPair)) {
+            return distanceMap.get(vertexPair);
+        }
+        else{
+            DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
+            distanceMap.put(vertexPair, dd.getDistance(s, t).intValue());
+            return dd.getDistance(s, t).intValue();
+        }
+
     }
 }

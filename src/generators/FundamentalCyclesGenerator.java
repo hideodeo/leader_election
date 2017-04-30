@@ -27,14 +27,14 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * @param treeIn ツリー
      */
     public FundamentalCyclesGenerator(MyGraph<MyVertex, MyEdge> graphIn, MyGraph<MyVertex, MyEdge> treeIn) {
-        this.tree = treeIn;
+        this.graph = graphIn;
 
         /** treeがgraphのsubgraphであることを確認する*/
         Collection<MyEdge> graphEdges = graph.getEdges();
-        for (MyEdge e : tree.getEdges()) {
+        for (MyEdge e : treeIn.getEdges()) {
             assert graphEdges.contains(e): "tree is not a sub-graph of the original graph";
         }
-        this.graph = graphIn;
+        this.tree = treeIn;
     }
 
     /**
