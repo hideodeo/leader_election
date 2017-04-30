@@ -1,14 +1,14 @@
 package entities;
 
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraDistance;
-import edu.uci.ics.jung.graph.util.Pair;
-import edu.uci.ics.jung.graph.util.EdgeType;
-
 import org.apache.commons.collections15.Factory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * MyGraph
@@ -41,7 +41,7 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     }
 
     /**
-     * initialize DijkstraDistance. Call this right after creating a graph.
+     * initialize DijkstraDistance.
      */
     private void initilizeDijkstra(){
         dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
@@ -69,69 +69,32 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
         }
     }
 
+    /**
+     * override the following four methods to initialize DijkstraDistance when topology of graph changes.
+     */
     @Override
     public boolean addVertex(V vertex) {
         initilizeDijkstra();
 
-        if(vertex == null) {
-            throw new IllegalArgumentException("vertex may not be null");
-        }
-        if (!containsVertex(vertex)) {
-            vertex_maps.put(vertex, new HashMap[]{new HashMap<V,E>(), new HashMap<V,E>(), new HashMap<V,E>()});
-            return true;
-        } else {
-            return false;
-        }
+        return super.addVertex(vertex);
     }
     @Override
     public boolean addEdge(E e, V v1, V v2) {
         initilizeDijkstra();
 
-        return addEdge(e, v1, v2, this.getDefaultEdgeType());
+        return super.addEdge(e, v1, v2);
     }
 
     @Override
     public boolean removeVertex(V vertex) {
         initilizeDijkstra();
 
-        if (!containsVertex(vertex))
-            return false;
-
-        // copy to avoid concurrent modification in removeEdge
-        Collection<E> incident = new ArrayList<E>(getIncidentEdges(vertex));
-
-        for (E edge : incident)
-            removeEdge(edge);
-
-        vertex_maps.remove(vertex);
-
-        return true;
+        return super.removeVertex(vertex);
     }
     @Override
     public boolean removeEdge(E edge) {
         initilizeDijkstra();
 
-        if (!containsEdge(edge))
-            return false;
-
-        Pair<V> endpoints = getEndpoints(edge);
-        V v1 = endpoints.getFirst();
-        V v2 = endpoints.getSecond();
-
-        // remove edge from incident vertices' adjacency maps
-        if (getEdgeType(edge) == EdgeType.DIRECTED)
-        {
-            vertex_maps.get(v1)[OUTGOING].remove(v2);
-            vertex_maps.get(v2)[INCOMING].remove(v1);
-            directed_edges.remove(edge);
-        }
-        else
-        {
-            vertex_maps.get(v1)[INCIDENT].remove(v2);
-            vertex_maps.get(v2)[INCIDENT].remove(v1);
-            undirected_edges.remove(edge);
-        }
-
-        return true;
+        return super.removeEdge(edge);
     }
 }
