@@ -67,9 +67,6 @@ public class Main {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
 
-                /** initialize DijkstraDistance */
-                graph.initilizeDijkstra();
-
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
 
