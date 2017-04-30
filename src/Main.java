@@ -21,12 +21,16 @@ public class Main {
         System.out.println("Simulation started.");
         /** parameters for simulation */
         int simulationTimes = 1;
-        int initialNumOfVertex = 10, maxNumOfVertex = 20, incrementalNumOfVertex = 10;
+        int initialNumOfVertex = 10, maxNumOfVertex = 11, incrementalNumOfVertex = 1;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
+        //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
         execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+
         System.out.println("Simulation finished.");
     }
 
@@ -62,6 +66,9 @@ public class Main {
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
+
+                /** initialize DijkstraDistance */
+                graph.initilizeDijkstra();
 
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());

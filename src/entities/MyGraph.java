@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class MyGraph<V, E> extends SparseGraph<V, E> {
     private Map<Set<MyVertex>, Integer> distanceMap = new HashMap<Set<MyVertex>, Integer>();
+    private DijkstraDistance<MyVertex, MyEdge> dd;
 
     /**
      * ファクトリを返すクラスメソッド
@@ -27,6 +28,13 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
                 return new MyGraph<MyVertex, MyEdge>();
             }
         };
+    }
+
+    /**
+     * initialize DijkstraDistance. Call this right after creating a graph.
+     */
+    public void initilizeDijkstra(){
+        dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
     }
 
     /**
@@ -45,10 +53,8 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
             return distanceMap.get(vertexPair);
         }
         else{
-            DijkstraDistance<MyVertex, MyEdge> dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
             distanceMap.put(vertexPair, dd.getDistance(s, t).intValue());
             return dd.getDistance(s, t).intValue();
         }
-
     }
 }

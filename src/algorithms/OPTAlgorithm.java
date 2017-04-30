@@ -47,7 +47,7 @@ public class OPTAlgorithm implements Algorithm {
     }
 
     /**
-     * 
+     *
      * @param cycles
      * @param resultMap
      * @param depth
