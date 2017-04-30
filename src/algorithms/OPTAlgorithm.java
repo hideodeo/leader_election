@@ -46,6 +46,14 @@ public class OPTAlgorithm implements Algorithm {
         return resultMap;
     }
 
+    /**
+     * 
+     * @param cycles
+     * @param resultMap
+     * @param depth
+     * @param current
+     * @param objectiveFunctionValue
+     */
     private void selectBestSolution(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current, double objectiveFunctionValue)
     {
         if(depth == cycles.size())
