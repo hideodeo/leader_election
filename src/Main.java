@@ -21,12 +21,16 @@ public class Main {
         System.out.println("Simulation started.");
         /** parameters for simulation */
         int simulationTimes = 1;
-        int initialNumOfVertex = 10, maxNumOfVertex = 20, incrementalNumOfVertex = 10;
+        int initialNumOfVertex = 4, maxNumOfVertex = 8, incrementalNumOfVertex = 1;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
-        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+
         System.out.println("Simulation finished.");
     }
 
@@ -84,9 +88,11 @@ public class Main {
                 valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) + EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
             }
             /** calculate average values following the number of simulation */
-            valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) / simulationTimesIn);
+            double av = valueOfObjectiveFunction.get(i) / simulationTimesIn;
+            valueOfObjectiveFunction.remove(i);
+            valueOfObjectiveFunction.add(i, av);
 
-            System.out.println("av values of OF: " + valueOfObjectiveFunction.get(i) / simulationTimesIn);
+            System.out.println("av values of OF: " + av);
         }
         dataLists.add(valueOfObjectiveFunction);
 
