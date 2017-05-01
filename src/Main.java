@@ -29,7 +29,7 @@ public class Main {
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+//        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
 
         System.out.println("Simulation finished.");
     }
@@ -66,6 +66,7 @@ public class Main {
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
+                System.out.println("# of edges   : " + graph.getEdgeCount());
 
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
@@ -76,6 +77,7 @@ public class Main {
                 /** create cycles */
                 FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
                 List<MyCycle> cycles = cyclesGenerator.create();
+                System.out.println("# of cycles  : " + cycles.size());
 
                 /** calculate and set adjacent cycles */
                 for (MyCycle cycle: cycles)
