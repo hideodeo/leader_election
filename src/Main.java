@@ -21,15 +21,15 @@ public class Main {
         System.out.println("Simulation started.");
         /** parameters for simulation */
         int simulationTimes = 1;
-        int initialNumOfVertex = 2, maxNumOfVertex = 8, incrementalNumOfVertex = 1;
+        int initialNumOfVertex = 4, maxNumOfVertex = 8, incrementalNumOfVertex = 1;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
 
         System.out.println("Simulation finished.");
     }

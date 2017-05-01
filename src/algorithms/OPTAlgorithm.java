@@ -69,6 +69,16 @@ public class OPTAlgorithm implements Algorithm {
             current.put(cycles.get(depth), v);
             selectBestSolution(cycles, resultMap, depth + 1, current, objectiveFunctionValue);
         }
+        System.out.println("test");
+    }
+
+    private void selectBestSolution1(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current, double objectiveFunctionValue)
+    {
+        for (int i=0; i<cycles.size(); i++){
+            for (int j=0; j<cycles.get(i).getVertexCount(); j++){
+
+            }
+        }
     }
 
     /**
