@@ -41,6 +41,13 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     }
 
     /**
+     * initialize DijkstraDistance.
+     */
+     private void initializeDijkstra() {
+         dd.reset();
+     }
+
+    /**
      * return distance from the map if it is previously calculated.
      * If not, calculate and add distance to the map. Then, return it.
      * @param s
@@ -67,14 +74,14 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     @Override
     public boolean addVertex(V vertex) {
         boolean bool = super.addVertex(vertex);
-        dd.reset();
+        initializeDijkstra();
 
         return bool;
     }
     @Override
     public boolean addEdge(E e, V v1, V v2) {
         boolean bool = super.addEdge(e, v1, v2);
-        dd.reset();
+        initializeDijkstra();
 
         return bool;
     }
@@ -82,14 +89,14 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     @Override
     public boolean removeVertex(V vertex) {
         boolean bool = super.removeVertex(vertex);
-        dd.reset();
+        initializeDijkstra();
 
         return bool;
     }
     @Override
     public boolean removeEdge(E edge) {
         boolean bool = super.removeEdge(edge);
-        dd.reset();
+        initializeDijkstra();
 
         return bool;
     }
