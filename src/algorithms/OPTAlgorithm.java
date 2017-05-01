@@ -20,6 +20,9 @@ public class OPTAlgorithm implements Algorithm {
     private MyGraph<MyVertex, MyEdge> graph;
     /** cycle set */
     private List<MyCycle> cycleList;
+    /** variable for selecting optimal solution */
+    private double objectiveFunctionValue = Double.MAX_VALUE;
+
     /**
      * コンストラクタ
      * @param graphIn グラフ
@@ -38,10 +41,9 @@ public class OPTAlgorithm implements Algorithm {
     public Map<MyCycle, MyVertex> solve() {
         /** initialization */
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
-        double objectiveFunctionValue = Double.MAX_VALUE;
 
         /** select best solution by comparing all combinations of leaders */
-        selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>(), objectiveFunctionValue);
+        selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>());
 
         return resultMap;
     }
@@ -52,9 +54,8 @@ public class OPTAlgorithm implements Algorithm {
      * @param resultMap
      * @param depth
      * @param current
-     * @param objectiveFunctionValue
      */
-    private void selectBestSolution(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current, double objectiveFunctionValue)
+    private void selectBestSolution(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current)
     {
         if(depth == cycles.size())
         {
@@ -67,19 +68,10 @@ public class OPTAlgorithm implements Algorithm {
         }
         for(MyVertex v: cycles.get(depth).getVertices()){
             current.put(cycles.get(depth), v);
-            selectBestSolution(cycles, resultMap, depth + 1, current, objectiveFunctionValue);
-        }
-        System.out.println("test");
-    }
-
-    private void selectBestSolution1(List<MyCycle> cycles, Map<MyCycle, MyVertex> resultMap, int depth, Map<MyCycle, MyVertex> current, double objectiveFunctionValue)
-    {
-        for (int i=0; i<cycles.size(); i++){
-            for (int j=0; j<cycles.get(i).getVertexCount(); j++){
-
-            }
+            selectBestSolution(cycles, resultMap, depth + 1, current);
         }
     }
+
 
     /**
      * generate all solutions and add them to a list of maps

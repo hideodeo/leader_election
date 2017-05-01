@@ -28,8 +28,8 @@ public class Main {
         /** execute simulations specifying settings*/
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
 
         System.out.println("Simulation finished.");
     }

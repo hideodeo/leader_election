@@ -59,13 +59,14 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
         vertexPair.add(s);
         vertexPair.add(t);
 
-        if (distanceMap.containsKey(vertexPair)) {
-            return distanceMap.get(vertexPair);
+        Object dist = distanceMap.get(vertexPair);
+        if (dist == null){
+            dist = dd.getDistance(s, t).intValue();
+            distanceMap.put(vertexPair, (Integer)dist);
+            return (Integer)dist;
         }
         else{
-            int dist = dd.getDistance(s, t).intValue();
-            distanceMap.put(vertexPair, dist);
-            return dist;
+            return (Integer)dist;
         }
     }
 
