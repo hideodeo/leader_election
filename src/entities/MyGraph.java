@@ -23,7 +23,7 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
      * constructor
      */
     public MyGraph(){
-        initilizeDijkstra();
+        dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
     }
 
     /**
@@ -41,13 +41,6 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     }
 
     /**
-     * initialize DijkstraDistance.
-     */
-    private void initilizeDijkstra(){
-        dd = new DijkstraDistance<MyVertex, MyEdge>((Graph<MyVertex, MyEdge>) this);
-    }
-
-    /**
      * return distance from the map if it is previously calculated.
      * If not, calculate and add distance to the map. Then, return it.
      * @param s
@@ -59,15 +52,13 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
         vertexPair.add(s);
         vertexPair.add(t);
 
-        Object dist = distanceMap.get(vertexPair);
+        Integer dist = distanceMap.get(vertexPair);
         if (dist == null){
             dist = dd.getDistance(s, t).intValue();
-            distanceMap.put(vertexPair, (Integer)dist);
-            return (Integer)dist;
+            distanceMap.put(vertexPair, dist);
+            return dist;
         }
-        else{
-            return (Integer)dist;
-        }
+        return dist;
     }
 
     /**
@@ -76,14 +67,14 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     @Override
     public boolean addVertex(V vertex) {
         boolean bool = super.addVertex(vertex);
-        initilizeDijkstra();
+        dd.reset();
 
         return bool;
     }
     @Override
     public boolean addEdge(E e, V v1, V v2) {
         boolean bool = super.addEdge(e, v1, v2);
-        initilizeDijkstra();
+        dd.reset();
 
         return bool;
     }
@@ -91,14 +82,14 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     @Override
     public boolean removeVertex(V vertex) {
         boolean bool = super.removeVertex(vertex);
-        initilizeDijkstra();
+        dd.reset();
 
         return bool;
     }
     @Override
     public boolean removeEdge(E edge) {
         boolean bool = super.removeEdge(edge);
-        initilizeDijkstra();
+        dd.reset();
 
         return bool;
     }
