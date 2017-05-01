@@ -43,6 +43,13 @@ public class OPTAlgorithm implements Algorithm {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
 
         /** select best solution by comparing all combinations of leaders */
+        long allCombinationsCount = 1;
+        System.out.print("Each cycle size = ");
+        for (MyCycle cycle: cycleList) {
+            allCombinationsCount *= cycle.getVertices().size();
+            System.out.print(cycle.getVertices().size() + ", ");
+        }
+        System.out.println("All patterns = " + allCombinationsCount);
         selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>());
 
         return resultMap;
@@ -59,10 +66,12 @@ public class OPTAlgorithm implements Algorithm {
     {
         if(depth == cycles.size())
         {
+//            System.out.println("Find leaf");
             double val = EvaluationFunctions.objectiveFunction(graph, cycles, current);
             if (val < objectiveFunctionValue) {
                 resultMap.putAll(current);
                 objectiveFunctionValue = val;
+//                System.out.println("Update best solution");
             }
             return;
         }
