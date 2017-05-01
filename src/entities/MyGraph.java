@@ -75,27 +75,31 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
      */
     @Override
     public boolean addVertex(V vertex) {
+        boolean bool = super.addVertex(vertex);
         initilizeDijkstra();
 
-        return super.addVertex(vertex);
+        return bool;
     }
     @Override
     public boolean addEdge(E e, V v1, V v2) {
+        boolean bool = super.addEdge(e, v1, v2);
         initilizeDijkstra();
 
-        return super.addEdge(e, v1, v2);
+        return bool;
     }
 
     @Override
     public boolean removeVertex(V vertex) {
+        boolean bool = super.removeVertex(vertex);
         initilizeDijkstra();
 
-        return super.removeVertex(vertex);
+        return bool;
     }
     @Override
     public boolean removeEdge(E edge) {
+        boolean bool = super.removeEdge(edge);
         initilizeDijkstra();
 
-        return super.removeEdge(edge);
+        return bool;
     }
 }
