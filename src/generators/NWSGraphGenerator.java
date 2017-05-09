@@ -16,10 +16,10 @@ public class NWSGraphGenerator implements GraphGenerator {
     /** 頂点数 */
     private int vertexCount;
     /** 辺を張る確率p */
-    private double p = 0.5;
+    private double p = 0.1;
 
     /**
-     * コンストラクタ
+     * constructor
      * @param vertexCount 頂点数
      */
     public NWSGraphGenerator(int vertexCount) {

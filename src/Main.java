@@ -1,6 +1,7 @@
 import IO.ResultsWriter;
 import algorithms.*;
 import calculators.EvaluationFunctions;
+import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
 import entities.MyCycle;
 import entities.MyEdge;
 import entities.MyGraph;
@@ -20,16 +21,17 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Simulation started.");
         /** parameters for simulation */
-        int simulationTimes = 1;
-        int initialNumOfVertex = 4, maxNumOfVertex = 8, incrementalNumOfVertex = 1;
+        int simulationTimes = 10;
+        int initialNumOfVertex = 10, maxNumOfVertex = 210, incrementalNumOfVertex = 50;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
-        //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-//        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
 
         System.out.println("Simulation finished.");
     }
@@ -66,7 +68,9 @@ public class Main {
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
-                System.out.println("# of edges   : " + graph.getEdgeCount());
+                System.out.println("# of edges       : " + graph.getEdgeCount());
+                System.out.println("diameter         : " + DistanceStatistics.diameter(graph));
+                System.out.println("density          : " + graph.getDensity());
 
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
@@ -77,11 +81,13 @@ public class Main {
                 /** create cycles */
                 FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
                 List<MyCycle> cycles = cyclesGenerator.create();
-                System.out.println("# of cycles  : " + cycles.size());
+                System.out.println("# of cycles      : " + cycles.size());
+                System.out.println("av size of cycles: " + EvaluationFunctions.averageCycleSize(cycles));
 
                 /** calculate and set adjacent cycles */
                 for (MyCycle cycle: cycles)
                     cycle.setAdjacentCycles(cycles);
+                System.out.println("# of ad cycles   : " + EvaluationFunctions.averageNeighborCyclesCount(graph, cycles));
 
                 /** elect leaders */
                 Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
@@ -95,6 +101,7 @@ public class Main {
             valueOfObjectiveFunction.add(i, av);
 
             System.out.println("av values of OF: " + av);
+            System.out.println("---------------------------------");
         }
         dataLists.add(valueOfObjectiveFunction);
 

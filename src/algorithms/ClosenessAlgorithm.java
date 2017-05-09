@@ -18,9 +18,9 @@ public class ClosenessAlgorithm implements Algorithm {
     /** cycle set */
     private List<MyCycle> cycleList;
     /**
-     * コンストラクタ
-     * @param graphIn グラフ
-     * @param cycleListIn ルートノード
+     * constructor
+     * @param graphIn graph
+     * @param cycleListIn root vertex
      */
     public ClosenessAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
@@ -28,18 +28,18 @@ public class ClosenessAlgorithm implements Algorithm {
     }
 
     /**
-     * リーダー集合を返すメソッド
-     * @return map
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
 
-        /** calculate closeness centrality for each vertex*/
+        /** calculate closeness centrality for each vertex */
         for (MyVertex v: graph.getVertices())
-            v.setClosenessCentrality(caluculateClosenessCentrality(v));
+            v.setClosenessCentrality(calculateClosenessCentrality(v));
 
-        /** サイクルごとにリーダーを選出*/
+        /** elect leader for each cycle */
         for (MyCycle cycle: cycleList){
             MyVertex leader = null;
             for (MyVertex v: cycle.getVertices()){
@@ -55,11 +55,11 @@ public class ClosenessAlgorithm implements Algorithm {
     }
 
     /**
-     * closeness centralityを計算するメソッド
+     * method to calculate closeness centrality
      * @param v vertex
      * @return value of closeness centrality
      */
-    public double caluculateClosenessCentrality(MyVertex v){
+    public double calculateClosenessCentrality(MyVertex v){
         double denominator = 0;
         double numerator = 0;
 

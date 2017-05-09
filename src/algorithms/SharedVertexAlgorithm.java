@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * SharedVertex
  *
- * # of shared vertexesに基いてリーダを選ぶクラス
+ * class to select leaders based on # of shared vertexes
  */
 public class SharedVertexAlgorithm implements Algorithm {
     /** graph */
@@ -20,9 +20,9 @@ public class SharedVertexAlgorithm implements Algorithm {
     /** cycle set */
     private List<MyCycle> cycleList;
     /**
-     * コンストラクタ
-     * @param graphIn グラフ
-     * @param cycleListIn ルートノード
+     * constructor
+     * @param graphIn graph
+     * @param cycleListIn root vertex
      */
     public SharedVertexAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
@@ -30,14 +30,14 @@ public class SharedVertexAlgorithm implements Algorithm {
     }
 
     /**
-     * リーダー集合を返すメソッド
-     * @return map
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
         Map<MyCycle, MyVertex> resultMap = new HashMap<MyCycle, MyVertex>();
 
-        /** vertexを共有する隣接サイクル数の計算*/
+        /** calculate # of adjacent cycles which share v */
         for (MyVertex v : graph.getVertices()){
             v.setNumOfAdCycles(0);
         }
@@ -48,7 +48,7 @@ public class SharedVertexAlgorithm implements Algorithm {
             }
         }
 
-        /** サイクルごとにリーダーを選出*/
+        /** elect leader for each cycle*/
         for (MyCycle cycle: cycleList){
             MyVertex leader = null;
             for (MyVertex v: cycle.getVertices()){

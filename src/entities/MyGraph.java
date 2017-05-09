@@ -69,6 +69,17 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
     }
 
     /**
+     * return density of graph
+     * density = # of edge / (n(n-1)/2)
+     */
+    public double getDensity(){
+        int numOfVertex = this.getVertexCount();
+        double density = this.getEdgeCount() * 2.0 / (numOfVertex * (numOfVertex-1));
+
+        return density;
+    }
+
+    /**
      * override the following four methods to initialize DijkstraDistance when topology of graph changes.
      */
     @Override

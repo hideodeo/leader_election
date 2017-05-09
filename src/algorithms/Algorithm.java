@@ -8,13 +8,12 @@ import java.util.Map;
 /**
  * Algorithm
  *
- * algorithmクラスのためのインターフェース
+ * interface for algorithm class
  */
 public interface Algorithm {
     /**
-     * リーダーを選出するメソッド
-     * @return リーダー集合のリスト
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
-
     Map<MyCycle, MyVertex> solve();
 }

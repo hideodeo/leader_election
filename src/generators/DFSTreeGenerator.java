@@ -21,7 +21,7 @@ public class DFSTreeGenerator implements TreeGenerator {
     private MyVertex root;
 
     /**
-     * コンストラクタ
+     * constructor
      * @param graph グラフ
      * @param root ルートノード
      */

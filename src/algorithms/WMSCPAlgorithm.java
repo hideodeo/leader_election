@@ -18,9 +18,9 @@ public class WMSCPAlgorithm implements Algorithm {
     /** cycle set */
     private List<MyCycle> cycleList;
     /**
-     * コンストラクタ
-     * @param graphIn グラフ
-     * @param cycleListIn ルートノード
+     * constructor
+     * @param graphIn graph
+     * @param cycleListIn root vertex
      */
     public WMSCPAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
@@ -28,8 +28,8 @@ public class WMSCPAlgorithm implements Algorithm {
     }
 
     /**
-     * リーダー集合を返すメソッド
-     * @return map
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {

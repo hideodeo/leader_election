@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * OPTAlgorithm
  *
- * 全組み合わせの解を生成し、最も良い解を返すクラス
+ * class to return an optimal solution by generating all combination
  */
 public class OPTAlgorithm implements Algorithm {
     /** graph */
@@ -24,9 +24,9 @@ public class OPTAlgorithm implements Algorithm {
     private double objectiveFunctionValue = Double.MAX_VALUE;
 
     /**
-     * コンストラクタ
-     * @param graphIn グラフ
-     * @param cycleListIn ルートノード
+     * constructor
+     * @param graphIn graph
+     * @param cycleListIn root vertex
      */
     public OPTAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
@@ -34,8 +34,8 @@ public class OPTAlgorithm implements Algorithm {
     }
 
     /**
-     * リーダー集合を返すメソッド
-     * @return map
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
@@ -49,6 +49,7 @@ public class OPTAlgorithm implements Algorithm {
             allCombinationsCount *= cycle.getVertices().size();
             System.out.print(cycle.getVertices().size() + ", ");
         }
+        System.out.println();
         System.out.println("All patterns = " + allCombinationsCount);
         selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>());
 

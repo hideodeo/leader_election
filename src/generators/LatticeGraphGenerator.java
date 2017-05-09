@@ -18,7 +18,7 @@ public class LatticeGraphGenerator implements GraphGenerator{
     private int vertexCount;
 
     /**
-     * コンストラクタ
+     * constructor
      * @param vertexCount 頂点数
      */
     public LatticeGraphGenerator(int vertexCount) {

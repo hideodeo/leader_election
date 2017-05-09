@@ -18,7 +18,7 @@ public class MyCycle {
     private List<MyCycle> adjacentCycles;
 
     /**
-     * コンストラクタ
+     * constructor
      */
     public MyCycle(MyGraph<MyVertex, MyEdge> graph){
         assert isCycle(graph): "the graph is not cycle. Not all vertices's degree is 2. ";

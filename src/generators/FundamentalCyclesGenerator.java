@@ -22,7 +22,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
     private MyGraph<MyVertex, MyEdge> tree;
 
     /**
-     * コンストラクタ
+     * constructor
      * @param graphIn グラフ
      * @param treeIn ツリー
      */

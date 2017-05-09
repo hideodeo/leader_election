@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * EvaluationFunctions
  *
- * 評価関数を計算するクラス
+ * class to calculate evaluation functions
  */
 public class EvaluationFunctions {
     /**

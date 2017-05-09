@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Random
  *
- * Generates 100 solutions and choose the best one.
+ * class to generate 100 solutions and choose the best.
  */
 public class RandomAlgorithm implements Algorithm {
     /** graph */
@@ -19,9 +19,9 @@ public class RandomAlgorithm implements Algorithm {
     /** cycle set */
     private List<MyCycle> cycleList;
     /**
-     * コンストラクタ
-     * @param graphIn グラフ
-     * @param cycleListIn ルートノード
+     * constructor
+     * @param graphIn graph
+     * @param cycleListIn root vertex
      */
     public RandomAlgorithm(MyGraph<MyVertex, MyEdge> graphIn, List<MyCycle> cycleListIn) {
         this.graph = graphIn;
@@ -29,8 +29,8 @@ public class RandomAlgorithm implements Algorithm {
     }
 
     /**
-     * リーダー集合を返すメソッド
-     * @return map
+     * method to elect leaders
+     * @return a map of cycle and leader pairs
      */
     @Override
     public Map<MyCycle, MyVertex> solve() {
