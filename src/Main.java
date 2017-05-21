@@ -97,7 +97,7 @@ public class Main {
                 /** save data into list */
                 valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) + EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
             }
-            /** calculate average values following the number of simulation */
+            /** calculate average values according to the number of simulation */
             double av = valueOfObjectiveFunction.get(i) / simulationTimesIn;
             valueOfObjectiveFunction.remove(i);
             valueOfObjectiveFunction.add(i, av);
