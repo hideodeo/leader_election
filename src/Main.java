@@ -22,7 +22,8 @@ public class Main {
         System.out.println("Simulation started.");
         /** parameters for simulation */
         int simulationTimes = 10;
-        int initialNumOfVertex = 10, maxNumOfVertex = 210, incrementalNumOfVertex = 50;
+        int initialNumOfVertex = 20, maxNumOfVertex = 20, incrementalNumOfVertex = 10;
+        int maxNumOfManagedVertex = 100;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
@@ -65,6 +66,7 @@ public class Main {
         /** execute simulations for leader election */
         for (int i=0; i < vertexNumIn.size(); i++) {
             System.out.println("# of vertexes: " + vertexNumIn.get(i));
+            System.out.println();
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
@@ -87,7 +89,7 @@ public class Main {
                 /** calculate and set adjacent cycles */
                 for (MyCycle cycle: cycles)
                     cycle.setAdjacentCycles(cycles);
-                System.out.println("# of ad cycles   : " + EvaluationFunctions.averageNeighborCyclesCount(graph, cycles));
+                System.out.println("# of ad cycles   : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
 
                 /** elect leaders */
                 Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
