@@ -10,23 +10,23 @@ public class DataCabinet {
     private List<Double> dataList = new ArrayList<Double>();
     private int simulationTimes = 0;
 
-    public DataCabinet(int simulationTimesIn){
+    public DataCabinet(int listSize, int simulationTimesIn){
         this.simulationTimes = simulationTimesIn;
+        /** initialize the list for data collection */
+        for (int i=0; i < listSize; i++){
+            dataList.add(0.0);
+        }
     }
 
     public double getAveragedValue(int i){
         return dataList.get(i) / simulationTimes;
     }
 
-    public void add(double data){
-        dataList.add(data);
+    public void cumulate(int i, double data){
+        dataList.add(i, dataList.get(i) + data);
     }
 
-    public void add(int i, double data){
-        dataList.add(i, data);
-    }
-
-    public List<Double> averagedDataList(){
+    public List<Double> getAveragedDataList(){
         List<Double> averagedDataList = new ArrayList<Double>();
 
         for (int i=0; i < dataList.size(); i++)
