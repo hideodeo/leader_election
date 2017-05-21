@@ -66,7 +66,6 @@ public class Main {
         /** execute simulations for leader election */
         for (int i=0; i < vertexNumIn.size(); i++) {
             System.out.println("# of vertexes: " + vertexNumIn.get(i));
-            System.out.println();
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
