@@ -38,11 +38,9 @@ public class Main {
         //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
         /** experiment on different root vertexes */
-        int a = 30;
-        execute("NWS", "BFS", a, "SharedVertex");
-        System.out.println("=================================================");
-        System.out.println("=================================================");
-        execute("NWS", "DFS", a, "SharedVertex");
+        int a = 16;
+        String[] treeNameList = {"BFS", "DFS"};
+        execute("NWS", a, treeNameList, "OPT");
 
         System.out.println("Simulation finished.");
     }
@@ -135,57 +133,61 @@ public class Main {
         writer.write(dataLists, filePath, "# of vertexes", "value of objective function");
     }
 
-    private static void execute(String graphNameIn, String treeNameIn, int numVertexIn, String algorithmNameIn) {
+    private static void execute(String graphNameIn, int numVertexIn, String[] treeNameListIn,String algorithmNameIn) {
         System.out.println("● Experiment on different root vertexes");
-        System.out.println("Condition: " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
 
-        /** prepare lists for data collection */
+        /** prepare list for data collection */
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
-        List<Double> objectiveFunction = new ArrayList<Double>();
 
         /** create graph */
         MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, numVertexIn).create();
 
-        /** use all vertexes in graph as root*/
-        for (MyVertex v: graph.getVertices()) {
-            System.out.println("Graph Feature");
-            System.out.println("  |V|                   : " + graph.getVertexCount());
-            System.out.println("  |E|                   : " + graph.getEdgeCount());
+        for (String treeName: treeNameListIn) {
+            System.out.println("Condition: " + graphNameIn + ", " + treeName + ", " + algorithmNameIn);
+            /** prepare list for data collection */
+            List<Double> objectiveFunction = new ArrayList<Double>();
+            /** use all vertexes in graph as root*/
+            for (MyVertex v : graph.getVertices()) {
+                System.out.println("Graph Feature");
+                System.out.println("  |V|                   : " + graph.getVertexCount());
+                System.out.println("  |E|                   : " + graph.getEdgeCount());
 
-            /** create tree */
-            MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeNameIn, graph, v).create();
+                /** create tree */
+                MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeName, graph, v).create();
 
-            /** create cycles */
-            FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
-            List<MyCycle> cycles = cyclesGenerator.create();
+                /** create cycles */
+                FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
+                List<MyCycle> cycles = cyclesGenerator.create();
 
-            /** calculate and set adjacent cycles */
-            for (MyCycle cycle: cycles)
-                cycle.setAdjacentCycles(cycles);
+                /** calculate and set adjacent cycles */
+                for (MyCycle cycle : cycles)
+                    cycle.setAdjacentCycles(cycles);
 
-            System.out.println("Cycle Distribution Feature");
-            System.out.println("  # of cycles           : " + cycles.size());
-            System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
-            System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
-            System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
+                System.out.println("Cycle Distribution Feature");
+                System.out.println("  # of cycles           : " + cycles.size());
+                System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
+                System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
+                System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
 
-            /** elect leaders */
-            Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
-            double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
-            objectiveFunction.add(OF);
-            System.out.println("OF value              : " + OF);
-            System.out.println("-------------------------------------------------");
+                /** elect leaders */
+                Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
+                double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
+                objectiveFunction.add(OF);
+                System.out.println("OF value              : " + OF);
+                System.out.println("-------------------------------------------------");
+            }
+            double totalOF = 0.0;
+            for (double e : objectiveFunction)
+                totalOF += e;
+            System.out.println("av OF value           : " + totalOF / objectiveFunction.size());
+            System.out.println("=================================================");
+            dataLists.add(objectiveFunction);
         }
-        double totalOF=0.0;
-        for (double e: objectiveFunction)
-            totalOF += e;
-        System.out.println("av OF value           : " + totalOF / objectiveFunction.size());
-        dataLists.add(objectiveFunction);
 
         /** output results into csv file */
         ResultsWriter writer = new ResultsWriter();
-        String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn);
-        writer.write(dataLists, filePath, "value of objective function");
+        String filePath = writer.getFullPath(graphNameIn, algorithmNameIn);
+        writer.write(dataLists, filePath, "BFS", "DFS");
     }
 
     /**
