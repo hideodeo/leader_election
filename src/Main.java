@@ -9,9 +9,11 @@ import entities.MyGraph;
 import entities.MyVertex;
 import generators.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /**
  * Main
@@ -133,49 +135,71 @@ public class Main {
         writer.write(dataLists, filePath, "# of vertexes", "value of objective function");
     }
 
-    private static void execute(String graphNameIn, int numVertexIn, String[] treeNameListIn,String algorithmNameIn) {
+    private static void execute(String graphNameIn, int numVertexIn, String[] treeNameListIn, String algorithmNameIn) {
         System.out.println("● Experiment on different root vertexes");
+        final String algorithmName = algorithmNameIn;
 
         /** prepare list for data collection */
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
 
         /** create graph */
-        MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, numVertexIn).create();
+        final MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, numVertexIn).create();
 
-        for (String treeName: treeNameListIn) {
-            System.out.println("Condition: " + graphNameIn + ", " + treeName + ", " + algorithmNameIn);
+        for (String treeName0: treeNameListIn) {
+            final String treeName = treeName0;
+            System.out.println("Condition: " + graphNameIn + ", " + treeName + ", " + algorithmName);
+
+            /** prepare thread pool for multi-thread programming */
+            ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            Collection<Callable<Void>> processes = new LinkedList<Callable<Void>>();
             /** prepare list for data collection */
-            List<Double> objectiveFunction = new ArrayList<Double>();
+            final List<Double> objectiveFunction = new ArrayList<Double>();
             /** use all vertexes in graph as root*/
-            for (MyVertex v : graph.getVertices()) {
-                System.out.println("Graph Feature");
-                System.out.println("  |V|                   : " + graph.getVertexCount());
-                System.out.println("  |E|                   : " + graph.getEdgeCount());
+            for (MyVertex v0 : graph.getVertices()) {
+                /** preparation for multi-thread programming */
+                final MyVertex v = v0;
+                processes.add(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        /** create tree */
+                        MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeName, graph, v).create();
 
-                /** create tree */
-                MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeName, graph, v).create();
+                        /** create cycles */
+                        FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
+                        List<MyCycle> cycles = cyclesGenerator.create();
 
-                /** create cycles */
-                FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
-                List<MyCycle> cycles = cyclesGenerator.create();
+                        /** calculate and set adjacent cycles */
+                        for (MyCycle cycle : cycles)
+                            cycle.setAdjacentCycles(cycles);
 
-                /** calculate and set adjacent cycles */
-                for (MyCycle cycle : cycles)
-                    cycle.setAdjacentCycles(cycles);
+                        /** elect leaders */
+                        Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmName, graph, cycles).solve();
+                        double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
+                        objectiveFunction.add(OF);
 
-                System.out.println("Cycle Distribution Feature");
-                System.out.println("  # of cycles           : " + cycles.size());
-                System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
-                System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
-                System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
+                        System.out.println("Graph Feature");
+                        System.out.println("  |V|                   : " + graph.getVertexCount());
+                        System.out.println("  |E|                   : " + graph.getEdgeCount());
+                        System.out.println("Cycle Distribution Feature");
+                        System.out.println("  # of cycles           : " + cycles.size());
+                        System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
+                        System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
+                        System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
+                        System.out.println("OF value              : " + OF);
+                        System.out.println("-------------------------------------------------");
 
-                /** elect leaders */
-                Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
-                double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
-                objectiveFunction.add(OF);
-                System.out.println("OF value              : " + OF);
-                System.out.println("-------------------------------------------------");
+                        return null;
+                    }
+                });
             }
+            try {
+                threadPool.invokeAll(processes);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                threadPool.shutdown();
+            }
+
             double totalOF = 0.0;
             for (double e : objectiveFunction)
                 totalOF += e;
@@ -186,7 +210,7 @@ public class Main {
 
         /** output results into csv file */
         ResultsWriter writer = new ResultsWriter();
-        String filePath = writer.getFullPath(graphNameIn, algorithmNameIn);
+        String filePath = writer.getFullPath(graphNameIn, algorithmName);
         writer.write(dataLists, filePath, "BFS", "DFS");
     }
 
