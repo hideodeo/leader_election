@@ -1,3 +1,4 @@
+import IO.DataCabinet;
 import IO.ResultsWriter;
 import algorithms.*;
 import calculators.EvaluationFunctions;
@@ -20,19 +21,21 @@ import java.util.Map;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Simulation started.");
+        System.out.println("-------------------------------------------------");
         /** parameters for simulation */
-        int simulationTimes = 10;
-        int initialNumOfVertex = 20, maxNumOfVertex = 20, incrementalNumOfVertex = 10;
-        int maxNumOfManagedVertex = 100;
+        int simulationTimes = 300;
+        int initialNumOfVertex = 30, maxNumOfVertex = 30, incrementalNumOfVertex = 10;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations specifying settings*/
         execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
 
         System.out.println("Simulation finished.");
     }
@@ -47,9 +50,18 @@ public class Main {
      */
     private static void execute(String graphNameIn, String treeNameIn, List<Integer> vertexNumIn, String algorithmNameIn, int simulationTimesIn) {
         /** prepare lists for data collection */
+        int numVertex = vertexNumIn.size();
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
         List<Double> numOfVertex = new ArrayList<Double>();
-        List<Double> valueOfObjectiveFunction = new ArrayList<Double>();
+        /** prepare cabinets for data collection */
+        DataCabinet objectiveFunctionCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet numOfEdgeCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet diameterCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet densityCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet numOfCyclesCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet cycleSizeCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet cycleSizeSTDCabinet = new DataCabinet(numVertex, simulationTimesIn);
+        DataCabinet numOfadjCyclesCabinet = new DataCabinet(numVertex, simulationTimesIn);
 
         /** collect data of the number of vertexes */
         for (int num: vertexNumIn) {
@@ -57,22 +69,14 @@ public class Main {
         }
         dataLists.add(numOfVertex);
 
-        /** collect data of objective function by iterating according to the number of vertexes */
-        /** initialize the list for data collection */
-        for (int i=0; i < vertexNumIn.size(); i++){
-            valueOfObjectiveFunction.add(0.0);
-        }
-
         /** execute simulations for leader election */
-        for (int i=0; i < vertexNumIn.size(); i++) {
-            System.out.println("# of vertexes: " + vertexNumIn.get(i));
-            System.out.println();
+        for (int i=0; i < numVertex; i++) {
+            System.out.println("● " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
+            System.out.println("Graph Feature");
+            System.out.println("  |V|                   : " + vertexNumIn.get(i));
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
                 MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, vertexNumIn.get(i)).create();
-                System.out.println("# of edges       : " + graph.getEdgeCount());
-                System.out.println("diameter         : " + DistanceStatistics.diameter(graph));
-                System.out.println("density          : " + graph.getDensity());
 
                 /** get vertexes from graph */
                 List<MyVertex> vertexList = new ArrayList<MyVertex>(graph.getVertices());
@@ -83,29 +87,38 @@ public class Main {
                 /** create cycles */
                 FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
                 List<MyCycle> cycles = cyclesGenerator.create();
-                System.out.println("# of cycles      : " + cycles.size());
-                System.out.println("av size of cycles: " + EvaluationFunctions.averageCycleSize(cycles));
 
                 /** calculate and set adjacent cycles */
                 for (MyCycle cycle: cycles)
                     cycle.setAdjacentCycles(cycles);
-                System.out.println("# of ad cycles   : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
 
                 /** elect leaders */
                 Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
 
-                /** save data into list */
-                valueOfObjectiveFunction.add(i, valueOfObjectiveFunction.get(i) + EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
+                /** cumulate data in each cabinet */
+                numOfEdgeCabinet.cumulate(i, graph.getEdgeCount());
+                diameterCabinet.cumulate(i, DistanceStatistics.diameter(graph));
+                densityCabinet.cumulate(i, graph.getDensity());
+                numOfCyclesCabinet.cumulate(i, cycles.size());
+                cycleSizeCabinet.cumulate(i, EvaluationFunctions.averageCycleSize(cycles));
+                cycleSizeSTDCabinet.cumulate(i, EvaluationFunctions.standardDeviationOfCycleSize(cycles));
+                numOfadjCyclesCabinet.cumulate(i, EvaluationFunctions.averageNeighborCyclesCount(cycles));
+                objectiveFunctionCabinet.cumulate(i, EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
             }
-            /** calculate average values according to the number of simulation */
-            double av = valueOfObjectiveFunction.get(i) / simulationTimesIn;
-            valueOfObjectiveFunction.remove(i);
-            valueOfObjectiveFunction.add(i, av);
-
-            System.out.println("av values of OF: " + av);
-            System.out.println("---------------------------------");
+            /** print simulation data */
+            System.out.println("  |E|                   : " + numOfEdgeCabinet.getAveragedValue(i));
+            System.out.println("  diameter              : " + diameterCabinet.getAveragedValue(i));
+            System.out.println("  density               : " + densityCabinet.getAveragedValue(i));
+            System.out.println("Cycle Distribution Feature");
+            System.out.println("  # of cycles           : " + numOfCyclesCabinet.getAveragedValue(i));
+            System.out.println("  av size of cycles     : " + cycleSizeCabinet.getAveragedValue(i));
+            System.out.println("  std of size of cycles : " + cycleSizeSTDCabinet.getAveragedValue(i));
+            System.out.println("  # of adjacent cycles  : " + numOfadjCyclesCabinet.getAveragedValue(i));
+            System.out.println("Evaluation Function");
+            System.out.println("  OF value              : " + objectiveFunctionCabinet.getAveragedValue(i));
+            System.out.println("-------------------------------------------------");
         }
-        dataLists.add(valueOfObjectiveFunction);
+        dataLists.add(objectiveFunctionCabinet.getAveragedDataList());
 
         /** output results into csv file */
         ResultsWriter writer = new ResultsWriter();
@@ -114,8 +127,6 @@ public class Main {
     }
 
     /**
-     * return graph generator according to graph name
-     *
      * @param graphNameIn
      * @param vertexNumIn
      * @return graph generator

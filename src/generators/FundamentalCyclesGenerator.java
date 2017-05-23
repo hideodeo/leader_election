@@ -68,7 +68,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
      * @return a fundamental cycle
      */
     private MyCycle createCycle(MyEdge complimentEdge) {
-        // 木+補木辺で構成されるグラフを作成する
+        /** 木+補木辺で構成されるグラフを作成する */
         MyGraph<MyVertex, MyEdge> subGraph = new MyGraph<MyVertex, MyEdge>();
         for (MyVertex v: tree.getVertices()){
             subGraph.addVertex(v);
@@ -78,7 +78,7 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
         }
         subGraph.addEdge(complimentEdge, graph.getEndpoints(complimentEdge));
 
-        // グラフの中から次数1の頂点を取り除くことでサイクルを抽出する
+        /** グラフの中から次数1の頂点を取り除くことでサイクルを抽出する */
         boolean didRemove = false;
         do{
             didRemove = false;
