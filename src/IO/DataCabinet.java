@@ -10,6 +10,11 @@ public class DataCabinet {
     private List<Double> dataList = new ArrayList<Double>();
     private int simulationTimes = 0;
 
+    /**
+     * constructor
+     * @param listSize
+     * @param simulationTimesIn
+     */
     public DataCabinet(int listSize, int simulationTimesIn){
         this.simulationTimes = simulationTimesIn;
         /** initialize the list for data collection */
