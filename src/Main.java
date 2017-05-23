@@ -28,14 +28,21 @@ public class Main {
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
-        /** execute simulations specifying settings*/
-        execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
-        execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
+        /** execute simulations specifying settings */
+        /** experiment on different number of vertexes */
+        //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
+        /** experiment on different root vertexes */
+        int a = 30;
+        execute("NWS", "BFS", a, "SharedVertex");
+        System.out.println("=================================================");
+        System.out.println("=================================================");
+        execute("NWS", "DFS", a, "SharedVertex");
 
         System.out.println("Simulation finished.");
     }
@@ -49,6 +56,9 @@ public class Main {
      * @param algorithmNameIn
      */
     private static void execute(String graphNameIn, String treeNameIn, List<Integer> vertexNumIn, String algorithmNameIn, int simulationTimesIn) {
+        System.out.println("● Experiment on different number of vertexes");
+        System.out.println("Condition: " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
+
         /** prepare lists for data collection */
         int numVertex = vertexNumIn.size();
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
@@ -71,7 +81,6 @@ public class Main {
 
         /** execute simulations for leader election */
         for (int i=0; i < numVertex; i++) {
-            System.out.println("● " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
             System.out.println("Graph Feature");
             System.out.println("  |V|                   : " + vertexNumIn.get(i));
             for (int j=0; j < simulationTimesIn; j++) {
@@ -124,6 +133,59 @@ public class Main {
         ResultsWriter writer = new ResultsWriter();
         String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn);
         writer.write(dataLists, filePath, "# of vertexes", "value of objective function");
+    }
+
+    private static void execute(String graphNameIn, String treeNameIn, int numVertexIn, String algorithmNameIn) {
+        System.out.println("● Experiment on different root vertexes");
+        System.out.println("Condition: " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
+
+        /** prepare lists for data collection */
+        List<List<Double>> dataLists = new ArrayList<List<Double>>();
+        List<Double> objectiveFunction = new ArrayList<Double>();
+
+        /** create graph */
+        MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, numVertexIn).create();
+
+        /** use all vertexes in graph as root*/
+        for (MyVertex v: graph.getVertices()) {
+            System.out.println("Graph Feature");
+            System.out.println("  |V|                   : " + graph.getVertexCount());
+            System.out.println("  |E|                   : " + graph.getEdgeCount());
+
+            /** create tree */
+            MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeNameIn, graph, v).create();
+
+            /** create cycles */
+            FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
+            List<MyCycle> cycles = cyclesGenerator.create();
+
+            /** calculate and set adjacent cycles */
+            for (MyCycle cycle: cycles)
+                cycle.setAdjacentCycles(cycles);
+
+            System.out.println("Cycle Distribution Feature");
+            System.out.println("  # of cycles           : " + cycles.size());
+            System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
+            System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
+            System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
+
+            /** elect leaders */
+            Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmNameIn, graph, cycles).solve();
+            double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
+            objectiveFunction.add(OF);
+            System.out.println("OF value              : " + OF);
+            System.out.println("-------------------------------------------------");
+        }
+        double totalOF=0.0;
+        for (double e: objectiveFunction)
+            totalOF += e;
+        System.out.println("av OF value           : " + totalOF / objectiveFunction.size());
+        dataLists.add(objectiveFunction);
+
+        /** output results into csv file */
+        ResultsWriter writer = new ResultsWriter();
+        String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn);
+        writer.write(dataLists, filePath, "value of objective function");
     }
 
     /**
