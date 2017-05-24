@@ -15,7 +15,7 @@ import java.util.*;
 public class EvaluationFunctions {
     /**
      * 目的関数を計算する
-     * obj func = （隣接しているサイクルのリーダー達との距離の総和 / 隣接しているサイクル数 の総和）/ 全サイクル数
+     * obj func = （隣接しているサイクルのリーダー達との距離の総和 / 隣接サイクル数の総和）/ 全サイクル数
      * @param graph グラフ
      * @param cycles サイクル
      * @param leaders リーダー
@@ -86,11 +86,10 @@ public class EvaluationFunctions {
 
     /**
      * 平均隣接サイクル数を計算する
-     * @param graph グラフ
      * @param cycles サイクル集合
      * @return 平均隣接サイクル数
      */
-    public static double averageNeighborCyclesCount(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles) {
+    public static double averageNeighborCyclesCount(List<MyCycle> cycles) {
         double sum = 0.0;
         for(MyCycle c : cycles) {
             List<MyCycle> neighbors = c.getAdjacentCycles();

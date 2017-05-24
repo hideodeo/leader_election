@@ -2,6 +2,7 @@
 /tmp/
 /bin/
 /out/
+/simulationData/
 *.test
 *.swp
 *.class
