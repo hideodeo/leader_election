@@ -44,13 +44,13 @@ public class OPTAlgorithm implements Algorithm {
 
         /** select best solution by comparing all combinations of leaders */
         long allCombinationsCount = 1;
-        System.out.print("Each cycle size = ");
+//        System.out.print("Each cycle size = ");
         for (MyCycle cycle: cycleList) {
             allCombinationsCount *= cycle.getVertices().size();
-            System.out.print(cycle.getVertices().size() + ", ");
+//            System.out.print(cycle.getVertices().size() + ", ");
         }
-        System.out.println();
-        System.out.println("All patterns = " + allCombinationsCount);
+//        System.out.println();
+//        System.out.println("All patterns = " + allCombinationsCount);
         selectBestSolution(cycleList, resultMap, 0, new HashMap<MyCycle, MyVertex>());
 
         return resultMap;
