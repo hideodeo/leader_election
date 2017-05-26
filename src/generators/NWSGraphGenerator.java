@@ -31,7 +31,7 @@ public class NWSGraphGenerator implements GraphGenerator {
      * @param vertexCount 頂点数
      * @param possibility 辺を張る確率
      */
-    NWSGraphGenerator(int vertexCount, double possibility) {
+    public NWSGraphGenerator(int vertexCount, double possibility) {
         this.vertexCount = vertexCount;
         this.p = possibility;
     }
