@@ -9,9 +9,11 @@ import entities.MyGraph;
 import entities.MyVertex;
 import generators.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /**
  * Main
@@ -25,26 +27,23 @@ public class Main {
         /** parameters for simulation */
         int simulationTimes = 300;
         int initialNumOfVertex = 30, maxNumOfVertex = 30, incrementalNumOfVertex = 10;
->>>>>>> 63c37c06a274763f6bd42dae66288b7dfc35e336
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
-        /** execute simulations specifying settings*/
-<<<<<<< HEAD
+        /** execute simulations specifying settings */
+        /** experiment on different number of vertexes */
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
-        //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
-=======
-        execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
-        execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
->>>>>>> 63c37c06a274763f6bd42dae66288b7dfc35e336
+
+        /** experiment on different root vertexes */
+        int a = 15;
+        String[] treeNameList = {"BFS", "DFS"};
+        execute("NWS", a, treeNameList, "OPT");
 
         System.out.println("Simulation finished.");
     }
@@ -58,6 +57,9 @@ public class Main {
      * @param algorithmNameIn
      */
     private static void execute(String graphNameIn, String treeNameIn, List<Integer> vertexNumIn, String algorithmNameIn, int simulationTimesIn) {
+        System.out.println("● Experiment on different number of vertexes");
+        System.out.println("Condition: " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
+
         /** prepare lists for data collection */
         int numVertex = vertexNumIn.size();
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
@@ -80,7 +82,6 @@ public class Main {
 
         /** execute simulations for leader election */
         for (int i=0; i < numVertex; i++) {
-            System.out.println("● " + graphNameIn + ", " + treeNameIn + ", " + algorithmNameIn);
             System.out.println("Graph Feature");
             System.out.println("  |V|                   : " + vertexNumIn.get(i));
             for (int j=0; j < simulationTimesIn; j++) {
@@ -133,6 +134,85 @@ public class Main {
         ResultsWriter writer = new ResultsWriter();
         String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn);
         writer.write(dataLists, filePath, "# of vertexes", "value of objective function");
+    }
+
+    private static void execute(String graphNameIn, int numVertexIn, String[] treeNameListIn, String algorithmNameIn) {
+        System.out.println("● Experiment on different root vertexes");
+        final String algorithmName = algorithmNameIn;
+
+        /** prepare list for data collection */
+        List<List<Double>> dataLists = new ArrayList<List<Double>>();
+
+        /** create graph */
+        final MyGraph<MyVertex, MyEdge> graph = getGraphGenerator(graphNameIn, numVertexIn).create();
+
+        for (String treeName0: treeNameListIn) {
+            final String treeName = treeName0;
+            System.out.println("Condition: " + graphNameIn + ", " + treeName + ", " + algorithmName);
+
+            /** prepare thread pool for multi-thread programming */
+            ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            Collection<Callable<Void>> processes = new LinkedList<Callable<Void>>();
+            /** prepare list for data collection */
+            final List<Double> objectiveFunction = new ArrayList<Double>();
+            /** use all vertexes in graph as root*/
+            for (MyVertex v0 : graph.getVertices()) {
+                /** preparation for multi-thread programming */
+                final MyVertex v = v0;
+                processes.add(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        /** create tree */
+                        MyGraph<MyVertex, MyEdge> tree = getTreeGenerator(treeName, graph, v).create();
+
+                        /** create cycles */
+                        FundamentalCyclesGenerator cyclesGenerator = new FundamentalCyclesGenerator(graph, tree);
+                        List<MyCycle> cycles = cyclesGenerator.create();
+
+                        /** calculate and set adjacent cycles */
+                        for (MyCycle cycle : cycles)
+                            cycle.setAdjacentCycles(cycles);
+
+                        /** elect leaders */
+                        Map<MyCycle, MyVertex> leadersMap = getAlgorithm(algorithmName, graph, cycles).solve();
+                        double OF = EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap);
+                        objectiveFunction.add(OF);
+
+                        System.out.println("Graph Feature");
+                        System.out.println("  |V|                   : " + graph.getVertexCount());
+                        System.out.println("  |E|                   : " + graph.getEdgeCount());
+                        System.out.println("Cycle Distribution Feature");
+                        System.out.println("  # of cycles           : " + cycles.size());
+                        System.out.println("  av size of cycles     : " + EvaluationFunctions.averageCycleSize(cycles));
+                        System.out.println("  std of size of cycles : " + EvaluationFunctions.standardDeviationOfCycleSize(cycles));
+                        System.out.println("  # of adjacent cycles  : " + EvaluationFunctions.averageNeighborCyclesCount(cycles));
+                        System.out.println("OF value              : " + OF);
+                        System.out.println("-------------------------------------------------");
+
+                        return null;
+                    }
+                });
+            }
+            try {
+                threadPool.invokeAll(processes);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                threadPool.shutdown();
+            }
+
+            double totalOF = 0.0;
+            for (double e : objectiveFunction)
+                totalOF += e;
+            System.out.println("av OF value           : " + totalOF / objectiveFunction.size());
+            System.out.println("=================================================");
+            dataLists.add(objectiveFunction);
+        }
+
+        /** output results into csv file */
+        ResultsWriter writer = new ResultsWriter();
+        String filePath = writer.getFullPath(graphNameIn, algorithmName);
+        writer.write(dataLists, filePath, "BFS", "DFS");
     }
 
     /**
