@@ -15,7 +15,9 @@ import java.util.*;
 public class EvaluationFunctions {
     /**
      * 目的関数を計算する
-     * obj func = （隣接しているサイクルのリーダー達との距離の総和 / 隣接サイクル数の総和）/ 全サイクル数
+     * obj func = （隣接サイクルのリーダー達との距離の総和 / 隣接サイクル数の総和）/ 全サイクル数
+     * or
+     * obj func = 隣接サイクルのリーダー達との距離の総和 / 全サイクル数
      * @param graph グラフ
      * @param cycles サイクル
      * @param leaders リーダー
@@ -24,7 +26,7 @@ public class EvaluationFunctions {
     public static double objectiveFunction(MyGraph<MyVertex, MyEdge> graph, List<MyCycle> cycles, Map<MyCycle, MyVertex> leaders) {
         double sumOfLengths = 0;
         double result = 0;
-        for(MyCycle cycle : cycles) {
+        /**for(MyCycle cycle : cycles) {
             MyVertex leader = leaders.get(cycle);
             List<MyCycle> neighbors = cycle.getAdjacentCycles();
             // 隣接サイクルとの距離の総和を計算する
@@ -34,6 +36,18 @@ public class EvaluationFunctions {
             }
             result += sumOfLengths / neighbors.size();
             sumOfLengths = 0;
+        }**/
+
+        for(MyCycle cycle : cycles) {
+            MyVertex leader = leaders.get(cycle);
+            List<MyCycle> neighbors = cycle.getAdjacentCycles();
+            // 隣接サイクルとの距離の総和を計算する
+            for(MyCycle neighbor : neighbors) {
+                MyVertex neighborsLeader = leaders.get(neighbor);
+                sumOfLengths += graph.getDistanceBetween(leader, neighborsLeader);
+            }
+            result += sumOfLengths;
+            sumOfLengths = 0;
         }
 
         // サイクル数を計算
@@ -41,7 +55,6 @@ public class EvaluationFunctions {
         /** リーダー数を計算. Setは重複を許さないので自然に重複しているリーダーが消えるはず
         Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
         int leadersCount = leaderVertexes.getVertexCount(); */
-
         result /= cyclesCount;
         return result;
     }
