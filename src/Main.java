@@ -30,7 +30,7 @@ public class Main {
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
-        /** execute simulations specifying settings */
+        /** execute simulations */
         /** experiment on different number of vertexes */
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
