@@ -25,8 +25,8 @@ public class Main {
         System.out.println("Simulation started.");
         System.out.println("-------------------------------------------------");
         /** parameters for simulation */
-        int simulationTimes = 10;
-        int initialNumOfVertex = 30, maxNumOfVertex = 30, incrementalNumOfVertex = 10;
+        int simulationTimes = 100;
+        int initialNumOfVertex = 5, maxNumOfVertex = 5, incrementalNumOfVertex = 10;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
@@ -37,12 +37,12 @@ public class Main {
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
         /** experiment on different probability on random graph */
-        int n = 8;
-        execute("NWS", "BFS", n, "OPT", simulationTimes);
-        execute("NWS", "DFS", n, "OPT", simulationTimes);
+        int n = 10;
+        //execute("NWS", "BFS", n, "OPT", simulationTimes);
+        //execute("NWS", "DFS", n, "OPT", simulationTimes);
         /** experiment on different root vertexes */
         int a = 14;
         String[] treeNameList = {"BFS", "DFS"};
@@ -148,7 +148,7 @@ public class Main {
         List<Double> plist = new ArrayList<Double>();
 
         /** collect data of the number of vertexes */
-        for (double i = 0.1; i <= 0.7; i += 0.2) {
+        for (double i = 0.05; i <= 0.2; i += 0.05) {
             plist.add(i);
         }
         dataLists.add(plist);
@@ -167,6 +167,7 @@ public class Main {
         /** execute simulations for leader election */
         for (int i=0; i < numOfP; i++) {
             System.out.println("Graph Feature");
+            System.out.println("  p                     : " + plist.get(i));
             System.out.println("  |V|                   : " + numVertexIn);
             for (int j=0; j < simulationTimesIn; j++) {
                 /** create graph */
@@ -217,7 +218,7 @@ public class Main {
 
         /** output results into csv file */
         ResultsWriter writer = new ResultsWriter();
-        String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn);
+        String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn, "prob");
         writer.write(dataLists, filePath, "probability", "value of objective function");
     }
 

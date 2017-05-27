@@ -51,8 +51,8 @@ public class ResultsWriter {
      */
     public String getFullPath(String... names){
         /** ex. NWS_30_BFS_Random.csv */
-        //String path = "simulationsData/";
-        String path = "/Users/Hideo/Dropbox/simulation_data/leader_election/";
+        String path = "simulationsData/";
+        //String path = "/Users/Hideo/Dropbox/simulation_data/leader_election/";
 
         for (int i=0; i<names.length; i++){
             if (i != names.length-1)
