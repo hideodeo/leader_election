@@ -5,10 +5,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import org.apache.commons.collections15.Factory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * MyGraph
@@ -64,6 +61,19 @@ public class MyGraph<V, E> extends SparseGraph<V, E> {
             dist = dd.getDistance(s, t).intValue();
             distanceMap.put(vertexPair, dist);
             return dist;
+        }
+        return dist;
+    }
+
+    public int getLongestDistance(MyVertex v0, Collection<MyVertex> vCollection){
+        int dist = Integer.MIN_VALUE;
+        int buff = 0;
+        for (MyVertex v: vCollection){
+            if (v0 != v){
+                buff = getDistanceBetween(v0, v);
+                if (buff > dist)
+                    dist = buff;
+            }
         }
         return dist;
     }

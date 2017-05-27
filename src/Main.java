@@ -33,11 +33,12 @@ public class Main {
         /** execute simulations */
         /** experiment on different number of vertexes */
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
+        execute("NWS", "BFS", numOfVertexList, "Centroid", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
         /** experiment on different probability on random graph */
         int n = 10;
@@ -342,6 +343,8 @@ public class Main {
             return new ClosenessAlgorithm(graphIn, cyclesIn);
         else if (algorithmNameIn == "Random")
             return new RandomAlgorithm(graphIn, cyclesIn);
+        else if (algorithmNameIn == "Centroid")
+            return new CentroidAlgorithm(graphIn, cyclesIn);
         else if (algorithmNameIn == "OPT")
             return new OPTAlgorithm(graphIn, cyclesIn);
         return null;
