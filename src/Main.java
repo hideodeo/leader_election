@@ -25,7 +25,7 @@ public class Main {
         System.out.println("Simulation started.");
         System.out.println("-------------------------------------------------");
         /** parameters for simulation */
-        int simulationTimes = 1;
+        int simulationTimes = 2000;
         int initialNumOfVertex = 30, maxNumOfVertex = 30, incrementalNumOfVertex = 5;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
@@ -43,16 +43,17 @@ public class Main {
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
         /** experiment on different probability on random graph */
-        int n = 30;
-        execute("NWS", "BFS", n, "SharedVertex", simulationTimes);
-        //execute("NWS", "DFS", n, "SharedVertex", simulationTimes);
+        int n = 10;
+        //execute("NWS", "BFS", n, "SharedVertex", simulationTimes);
+        execute("NWS", "DFS", n, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", n, "Centroid", simulationTimes);
         //execute("NWS", "DFS", n, "Centroid", simulationTimes);
+
         //execute("NWS", "BFS", n, "OPT", simulationTimes);
         //execute("NWS", "DFS", n, "OPT", simulationTimes);
         //execute("NWS", "BFS", n, "Random", simulationTimes);
         /** experiment on different root vertexes */
-        int a = 14;
+        int a = 14, b = 5;
         String[] treeNameList = {"BFS", "DFS"};
         //execute("NWS", a, treeNameList, "OPT");
 
@@ -153,6 +154,7 @@ public class Main {
 
         /** prepare lists for data collection */
         List<List<Double>> dataLists = new ArrayList<List<Double>>();
+        List<List<Double>> dataLists_characteristics = new ArrayList<List<Double>>();
         List<Double> plist = new ArrayList<Double>();
 
         /** collect data of the number of vertexes */
@@ -160,6 +162,7 @@ public class Main {
             plist.add(i);
         }
         dataLists.add(plist);
+        dataLists_characteristics.add(plist);
 
         /** prepare cabinets for data collection */
         int numOfP = plist.size();
@@ -172,6 +175,7 @@ public class Main {
         DataCabinet cycleSizeSTDCabinet = new DataCabinet(numOfP, simulationTimesIn);
         DataCabinet numOfadjCyclesCabinet = new DataCabinet(numOfP, simulationTimesIn);
         DataCabinet numOfLeaderVertexes = new DataCabinet(numOfP, simulationTimesIn);
+        DataCabinet clusteringCoefficient = new DataCabinet(numOfP, simulationTimesIn);
 
         /** execute simulations for leader election */
         for (int i=0; i < numOfP; i++) {
@@ -210,16 +214,13 @@ public class Main {
                 numOfadjCyclesCabinet.cumulate(i, EvaluationFunctions.averageNeighborCyclesCount(cycles));
                 objectiveFunctionCabinet.cumulate(i, EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
                 numOfLeaderVertexes.cumulate(i, EvaluationFunctions.countLeaderVertexes(leadersMap));
-
-                for(Map.Entry<MyCycle, MyVertex> e : leadersMap.entrySet()) {
-                    if (! e.getKey().getVertices().contains(e.getValue()))
-                        System.out.println("#########################not included###########################");
-                }
+                clusteringCoefficient.cumulate(i, EvaluationFunctions.clusteringCoefficient(graph));
             }
             /** print simulation data */
             System.out.println("  |E|                   : " + numOfEdgeCabinet.getAveragedValue(i));
             System.out.println("  diameter              : " + diameterCabinet.getAveragedValue(i));
             System.out.println("  density               : " + densityCabinet.getAveragedValue(i));
+            System.out.println("  clustering coefficient: " + densityCabinet.getAveragedValue(i));
             System.out.println("Cycle Distribution Feature");
             System.out.println("  # of cycles           : " + numOfCyclesCabinet.getAveragedValue(i));
             System.out.println("  av size of cycles     : " + cycleSizeCabinet.getAveragedValue(i));
@@ -231,11 +232,20 @@ public class Main {
             System.out.println("-------------------------------------------------");
         }
         dataLists.add(objectiveFunctionCabinet.getAveragedDataList());
+        dataLists_characteristics.add(numOfEdgeCabinet.getChangeRatioList());
+        dataLists_characteristics.add(diameterCabinet.getChangeRatioList());
+        dataLists_characteristics.add(clusteringCoefficient.getChangeRatioList());
+        dataLists_characteristics.add(numOfCyclesCabinet.getChangeRatioList());
+        dataLists_characteristics.add(numOfadjCyclesCabinet.getChangeRatioList());
+        dataLists_characteristics.add(cycleSizeCabinet.getChangeRatioList());
+        dataLists_characteristics.add(cycleSizeSTDCabinet.getChangeRatioList());
 
         /** output results into csv file */
         ResultsWriter writer = new ResultsWriter();
         String filePath = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn, "prob");
+        String filePath1 = writer.getFullPath(graphNameIn, treeNameIn, algorithmNameIn, "prob_characteristics");
         writer.write(dataLists, filePath, "probability", "value of objective function");
+        writer.write(dataLists_characteristics, filePath1, "probability", "|E|", "diameter", "clustering coefficient", "# of cycles", "# of ad cycles", "cycle size (av)", "cycle size (std)");
     }
 
     private static void execute(String graphNameIn, int numVertexIn, String[] treeNameListIn, String algorithmNameIn) {

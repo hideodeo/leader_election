@@ -174,4 +174,23 @@ public class EvaluationFunctions {
         }
         return sum / leadersCount;
     }
+
+    public static double clusteringCoefficient(MyGraph graph) {
+        double total = 0.0;
+        for (Object v : graph.getVertices()) {
+            // Cumulate local clustering coefficient of vertex v.
+            int possible = graph.degree(v) * (graph.degree(v) - 1);
+            int actual = 0;
+            for (Object u : graph.getNeighbors(v)) {
+                for (Object w : graph.getNeighbors(v)) {
+                    if (graph.getNeighbors(w).contains(u))
+                        actual++;
+                }
+            }
+            if (possible > 0) {
+                total += 1.0 * actual / possible;
+            }
+        }
+        return total / graph.getVertexCount();
+    }
 }

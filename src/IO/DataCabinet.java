@@ -44,4 +44,16 @@ public class DataCabinet {
             averagedDataList.add(getAveragedValue(i));
         return averagedDataList;
     }
+
+    public List<Double> getChangeRatioList(){
+        List<Double> changeRatioDataList = new ArrayList<Double>();
+        changeRatioDataList.add(0.0);
+        double val = 0.0;
+
+        for (int i=0; i < dataList.size() -1 ; i++){
+            val = (getAveragedValue(i + 1) - getAveragedValue(i)) / getAveragedValue(i);
+            changeRatioDataList.add(val);
+        }
+        return changeRatioDataList;
+    }
 }

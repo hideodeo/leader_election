@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 /**
  * ResultsOutputer
@@ -54,12 +57,18 @@ public class ResultsWriter {
         String path = "simulationsData/";
         //String path = "/Users/Hideo/Dropbox/simulation_data/leader_election/";
 
+        Date now = new Date();
+        DateFormat dfYMD = new SimpleDateFormat("YYYYMMDD");
+        DateFormat dfHMS = new SimpleDateFormat("hhmmss");
+
+        path += dfYMD.format(now) + "T" + dfHMS.format(now) + "_";
+
         for (int i=0; i<names.length; i++){
             if (i != names.length-1)
                 path += names[i] + "_";
             else
                 path += names[i];
         }
-        return path + ".csv";
+        return  path + ".csv";
     }
 }
