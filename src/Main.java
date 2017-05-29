@@ -25,8 +25,8 @@ public class Main {
         System.out.println("Simulation started.");
         System.out.println("-------------------------------------------------");
         /** parameters for simulation */
-        int simulationTimes = 10;
-        int initialNumOfVertex = 10, maxNumOfVertex = 10, incrementalNumOfVertex = 5;
+        int simulationTimes = 1;
+        int initialNumOfVertex = 30, maxNumOfVertex = 30, incrementalNumOfVertex = 5;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
@@ -171,6 +171,7 @@ public class Main {
         DataCabinet cycleSizeCabinet = new DataCabinet(numOfP, simulationTimesIn);
         DataCabinet cycleSizeSTDCabinet = new DataCabinet(numOfP, simulationTimesIn);
         DataCabinet numOfadjCyclesCabinet = new DataCabinet(numOfP, simulationTimesIn);
+        DataCabinet numOfLeaderVertexes = new DataCabinet(numOfP, simulationTimesIn);
 
         /** execute simulations for leader election */
         for (int i=0; i < numOfP; i++) {
@@ -208,6 +209,12 @@ public class Main {
                 cycleSizeSTDCabinet.cumulate(i, EvaluationFunctions.standardDeviationOfCycleSize(cycles));
                 numOfadjCyclesCabinet.cumulate(i, EvaluationFunctions.averageNeighborCyclesCount(cycles));
                 objectiveFunctionCabinet.cumulate(i, EvaluationFunctions.objectiveFunction(graph, cycles, leadersMap));
+                numOfLeaderVertexes.cumulate(i, EvaluationFunctions.countLeaderVertexes(leadersMap));
+
+                for(Map.Entry<MyCycle, MyVertex> e : leadersMap.entrySet()) {
+                    if (! e.getKey().getVertices().contains(e.getValue()))
+                        System.out.println("#########################not included###########################");
+                }
             }
             /** print simulation data */
             System.out.println("  |E|                   : " + numOfEdgeCabinet.getAveragedValue(i));
@@ -218,6 +225,7 @@ public class Main {
             System.out.println("  av size of cycles     : " + cycleSizeCabinet.getAveragedValue(i));
             System.out.println("  std of size of cycles : " + cycleSizeSTDCabinet.getAveragedValue(i));
             System.out.println("  # of adjacent cycles  : " + numOfadjCyclesCabinet.getAveragedValue(i));
+            System.out.println("  # of leader vertexes  : " + numOfLeaderVertexes.getAveragedValue(i));
             System.out.println("Evaluation Function");
             System.out.println("  OF value              : " + objectiveFunctionCabinet.getAveragedValue(i));
             System.out.println("-------------------------------------------------");

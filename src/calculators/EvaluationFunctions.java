@@ -51,11 +51,18 @@ public class EvaluationFunctions {
 
         // サイクル数を計算
         int cyclesCount = cycles.size();
-        /** リーダー数を計算. Setは重複を許さないので自然に重複しているリーダーが消えるはず
-        Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
-        int leadersCount = leaderVertexes.getVertexCount(); */
         result /= (cyclesCount * 2);
         return result;
+    }
+
+    /**
+     * リーダー数を計算. Setは重複を許さないので自然に重複しているリーダーが消えるはず
+     * @param leaders
+     * @return
+     */
+    public static int countLeaderVertexes(Map<MyCycle, MyVertex> leaders){
+        Set<MyVertex> leaderVertexes = new HashSet<MyVertex>(leaders.values());
+        return leaderVertexes.size();
     }
 
     /**
