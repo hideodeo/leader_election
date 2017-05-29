@@ -51,6 +51,8 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
                 list.add(cycle);
             }
         }
+
+        assert checkNumOfCycles(list): "# of cycles is not correct. It should follow |E| - |V| + 1.";
         return list;
     }
 
@@ -92,5 +94,18 @@ public class FundamentalCyclesGenerator implements CyclesGenerator {
         } while (didRemove);
 
         return new MyCycle(subGraph);
+    }
+
+    /**
+     * check if # of cycles is |E| - |V| + 1.
+     * @param list
+     * @return
+     */
+    private boolean checkNumOfCycles(List<MyCycle> list){
+        int num = graph.getEdgeCount() - graph.getVertexCount() + 1;
+        if (list.size() == num)
+            return true;
+        else
+            return false;
     }
 }

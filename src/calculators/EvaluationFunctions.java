@@ -37,7 +37,6 @@ public class EvaluationFunctions {
             result += sumOfLengths / neighbors.size();
             sumOfLengths = 0;
         }**/
-
         for(MyCycle cycle : cycles) {
             MyVertex leader = leaders.get(cycle);
             List<MyCycle> neighbors = cycle.getAdjacentCycles();
@@ -51,11 +50,11 @@ public class EvaluationFunctions {
         }
 
         // サイクル数を計算
-        int cyclesCount = leaders.values().size();
+        int cyclesCount = cycles.size();
         /** リーダー数を計算. Setは重複を許さないので自然に重複しているリーダーが消えるはず
         Set<MyVertex> leaderVertexes = (Set<MyVertex>) leaders.values();
         int leadersCount = leaderVertexes.getVertexCount(); */
-        result /= cyclesCount;
+        result /= (cyclesCount * 2);
         return result;
     }
 

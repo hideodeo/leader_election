@@ -25,25 +25,32 @@ public class Main {
         System.out.println("Simulation started.");
         System.out.println("-------------------------------------------------");
         /** parameters for simulation */
-        int simulationTimes = 100;
-        int initialNumOfVertex = 5, maxNumOfVertex = 5, incrementalNumOfVertex = 10;
+        int simulationTimes = 10;
+        int initialNumOfVertex = 10, maxNumOfVertex = 10, incrementalNumOfVertex = 5;
         /** prepare a list for the num of vertexes */
         List<Integer> numOfVertexList = getVertexList(initialNumOfVertex, maxNumOfVertex, incrementalNumOfVertex);
 
         /** execute simulations */
         /** experiment on different number of vertexes */
         //execute("NWS", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
-        execute("NWS", "BFS", numOfVertexList, "Centroid", simulationTimes);
         //execute("NWS", "DFS", numOfVertexList, "SharedVertex", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "Centroid", simulationTimes);
+        //execute("NWS", "DFS", numOfVertexList, "Centroid", simulationTimes);
+        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
+        //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
+
         //execute("Lattice", "BFS", numOfVertexList, "SharedVertex", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Closeness", simulationTimes);
         //execute("NWS", "BFS", numOfVertexList, "Random", simulationTimes);
-        //execute("NWS", "BFS", numOfVertexList, "OPT", simulationTimes);
-        //execute("NWS", "DFS", numOfVertexList, "OPT", simulationTimes);
         /** experiment on different probability on random graph */
-        int n = 10;
+        int n = 30;
+        execute("NWS", "BFS", n, "SharedVertex", simulationTimes);
+        //execute("NWS", "DFS", n, "SharedVertex", simulationTimes);
+        //execute("NWS", "BFS", n, "Centroid", simulationTimes);
+        //execute("NWS", "DFS", n, "Centroid", simulationTimes);
         //execute("NWS", "BFS", n, "OPT", simulationTimes);
         //execute("NWS", "DFS", n, "OPT", simulationTimes);
+        //execute("NWS", "BFS", n, "Random", simulationTimes);
         /** experiment on different root vertexes */
         int a = 14;
         String[] treeNameList = {"BFS", "DFS"};

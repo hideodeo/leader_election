@@ -27,8 +27,14 @@ public class DataCabinet {
         return dataList.get(i) / simulationTimes;
     }
 
+    public double get(int i){
+        return dataList.get(i);
+    }
+
     public void cumulate(int i, double data){
-        dataList.add(i, dataList.get(i) + data);
+        double buff = dataList.get(i);
+        dataList.remove(i);
+        dataList.add(i, buff + data);
     }
 
     public List<Double> getAveragedDataList(){

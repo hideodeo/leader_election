@@ -16,10 +16,10 @@ import java.util.HashSet;
 public class BAGraphGenerator implements GraphGenerator {
     /** 頂点数 */
     private int vertexCount;
-    /** evolve()1回あたりに辺を作る個数? */
-    private int numEdgesToAttach = 5;
-    /** evolve()する回数 */
-    private int numTimeSteps = 10;
+    /** 頂点数 */
+    private int initVertex = 2;
+    /** evolve()1回あたりに辺を作る個数 */
+    private int numEdgesToAttach = 2;
 
     /**
      * コンストラクタ
@@ -27,18 +27,6 @@ public class BAGraphGenerator implements GraphGenerator {
      */
     public BAGraphGenerator(int vertexCount) {
         this.vertexCount = vertexCount;
-    }
-
-    /**
-     * コンストラクタ
-     * @param vertexCount 頂点数
-     * @param numEdgesToAttach evolve1回あたりに辺を作る個数?
-     * @param numTimeSteps evolve数
-     */
-    public BAGraphGenerator(int vertexCount, int numEdgesToAttach, int numTimeSteps) {
-        this.vertexCount = vertexCount;
-        this.numEdgesToAttach = numEdgesToAttach;
-        this.numTimeSteps = numTimeSteps;
     }
 
     /**
@@ -51,12 +39,25 @@ public class BAGraphGenerator implements GraphGenerator {
                 MyGraph.getFactory(),
                 MyVertex.getFactory(),
                 MyEdge.getFactory(),
-                this.vertexCount,
+                this.initVertex,
                 this.numEdgesToAttach,
                 new HashSet<MyVertex>()
         );
-        bag.evolveGraph(this.numTimeSteps);
+        bag.evolveGraph(vertexCount - initVertex);
         MyGraph<MyVertex, MyEdge> graph = (MyGraph<MyVertex, MyEdge>) bag.create();
+
+//        for(MyVertex v1: graph.getVertices()){
+//            if(v1.getID() == 0){
+//                for(MyVertex v2:graph.getVertices()){
+//                    if(v2.getID() == 1){
+//                        graph.addEdge(new MyEdge(), v1, v2);
+//                        break;
+//                    }
+//                }
+//                break;
+//            }
+//        }
+
         return graph;
     }
 }
